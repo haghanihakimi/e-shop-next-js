@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db" // env("DATABASE_URL")
+}
+
+model Users {
+  id                Int         @id @default(autoincrement())
+  orders            OrderItem[]
+  firstname         String
+  surname           String
+  email             String
+  email_verified_at DateTime?
+  password          String?
+  photo             String?
+  address           String?
+  phone             String?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @default(now()) @updatedAt
+}
+
+model Brand {
+  id          Int       @id @default(autoincrement())
+  products    Product[]
+  title       String
+  description String?
+  logo        String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
+}
+
+model Category {
+  id              Int               @id @default(autoincrement())
+  ProductCategory ProductCategory[]
+  name            String
+  description     String?
+  logo            String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @default(now()) @updatedAt
+}
+
+model Product {
+  id               Int               @id @default(autoincrement())
+  brand            Brand             @relation(fields: [brandId], references: [id])
+  brandId          Int
+  categories       ProductCategory[]
+  orders           OrderItem[]
+  title            String
+  shortDescription String?
+  description      String?
+  price            Decimal?
+  discount         Decimal?
+  stock            Int?
+  rating           Decimal?
+  featured         Boolean           @default(false)
+  attributes       String?
+  thumbnail        String?
+  images           String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @default(now()) @updatedAt
+}
+
+model ProductCategory {
+  productId  Int
+  product    Product  @relation(fields: [productId], references: [id])
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  @@id([productId, categoryId])
+}
+
+model Order {
+  id        Int         @id @default(autoincrement())
+  items     OrderItem[]
+  status    String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @default(now()) @updatedAt
+}
+
+model OrderItem {
+  orderId   Int
+  order     Order    @relation(fields: [orderId], references: [id])
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+  Users     Users?   @relation(fields: [usersId], references: [id])
+  usersId   Int?
+  quantity  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@id([orderId, productId])
+}
