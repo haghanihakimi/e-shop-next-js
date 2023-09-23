@@ -31,15 +31,15 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
             });
 
             if (lowStockItems.length > 0) {
-                res.status(200).json(lowStockItems);
+                return res.status(200).json(lowStockItems);
             }
-            res.status(200).json(lowStockItems);
+            return res.status(200).json(lowStockItems);
 
         } catch (e) {
-            res.status(500).json({ error: "Unable to retrieve stock status at this moment" });
+            return res.status(500).json({ error: "Unable to retrieve stock status at this moment" });
         }
 
     } else {
-        res.status(405).end();
+        return res.status(405).end();
     }
 }

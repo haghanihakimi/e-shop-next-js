@@ -22,12 +22,12 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         const session = await getServerSession(req, res, authOptions);
 
         if (!session) {
-            res.status(401).json("Unauthorized access!");
+            return res.status(401).json("Unauthorized access!");
         }
         try {
             await applyRateLimit(req, res)
         } catch {
-            res.status(429).json('Too Many Requests')
+            return res.status(429).json('Too Many Requests')
         }
         try {
             const itemIds = req.body.cart.map((item: any) => item.id);
@@ -44,7 +44,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
             });
 
             if (lowStockItems.length > 0) {
-                res.status(404).json("Apologies, some items are unavailable for now. Please save them for future purchase. We appreciate your patience.");
+                return res.status(404).json("Apologies, some items are unavailable for now. Please save them for future purchase. We appreciate your patience.");
             }
             const placeOrder = await prisma.order.create({
                 data: {
@@ -103,16 +103,16 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                         order: placeOrder,
                     });
                 }
-                res.status(200).json({ stockError: true, stock: stockLow, complete: false, message: "Unable to place order at this time. Please check your payment details and try again." });
+                return res.status(200).json({ stockError: true, stock: stockLow, complete: false, message: "Unable to place order at this time. Please check your payment details and try again." });
             }
-            res.status(200).json({ stockError: true, stock: stockLow, complete: false, message: "Unable to place order at this time. Please check your payment details and try again." });
+            return res.status(200).json({ stockError: true, stock: stockLow, complete: false, message: "Unable to place order at this time. Please check your payment details and try again." });
         } catch (e) {
-            res.status(500).json("Unable to place order at this time. Please check your payment details and try again.");
+            return res.status(500).json("Unable to place order at this time. Please check your payment details and try again.");
         } finally {
             await prisma.$disconnect();
         }
 
     } else {
-        res.status(405).end("Internal server error.");
+        return res.status(405).end("Internal server error.");
     }
 }

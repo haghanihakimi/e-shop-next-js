@@ -35,11 +35,11 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                 }
             }
 
-            res.status(200).json(relatedProducts);
+            return res.status(200).json(relatedProducts);
         } catch (e) {
-            res.status(500).json({ error: 'Unable to fetch product.' });
+            return res.status(500).json({ error: 'Unable to fetch product.' });
         }
     } else {
-        res.status(405).end(); // Method Not Allowed
+        return res.status(405).end(); // Method Not Allowed
     }
 }

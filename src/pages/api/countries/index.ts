@@ -12,17 +12,17 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         const session = await getServerSession(req, res, authOptions);
 
         if(!session){
-            res.status(200).json(countriesFetch);
+            return res.status(200).json(countriesFetch);
         }
         try {
 
             countriesFetch = await prisma.countries.findMany();
-            res.status(200).json(countriesFetch);
+            return res.status(200).json(countriesFetch);
         } catch (e) {
-            res.status(500).json({ error: 'Unable to fetch countries list.' });
+            return res.status(500).json({ error: 'Unable to fetch countries list.' });
         }
 
     } else {
-        res.status(405).end("Internal server error");
+        return res.status(405).end("Internal server error");
     }
 }

@@ -15,7 +15,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         const session = await getServerSession(req, res, authOptions);
 
         if (!session) {
-            res.status(401).json("Unauthorized access!");
+            return res.status(401).json("Unauthorized access!");
         }
         try {
             await prisma.$transaction(async (prisma) => {
@@ -28,17 +28,17 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                     }
                 });
                 if(allOrders && allOrders.length > 0) {
-                    res.status(200).json(allOrders);
+                    return res.status(200).json(allOrders);
                 }
             });
-            res.status(200).json([]);
+            return res.status(200).json([]);
         } catch (e) {
-            res.status(500).json({ error: "Unable to place order at this time. Please check your payment details and try again. 500" });
+            return res.status(500).json({ error: "Unable to place order at this time. Please check your payment details and try again. 500" });
         } finally {
             await prisma.$disconnect();
         }
 
     } else {
-        res.status(405).end("Internal server error.");
+        return res.status(405).end("Internal server error.");
     }
 }

@@ -23,13 +23,13 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                 }
             });
             if(fetchProduct && Object.keys(fetchProduct).length > 0) {
-                res.status(200).json(fetchProduct);
+                return res.status(200).json(fetchProduct);
             }
-            res.status(404).json("Product not found!");
+            return res.status(404).json("Product not found!");
         } catch (e) {
-            res.status(500).json({ error: 'Unable to fetch product.' });
+            return res.status(500).json({ error: 'Unable to fetch product.' });
         }
     } else {
-        res.status(405).end("Internal server error"); // Method Not Allowed
+        return res.status(405).end("Internal server error"); // Method Not Allowed
     }
 }

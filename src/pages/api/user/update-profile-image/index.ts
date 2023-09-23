@@ -12,7 +12,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         const session = await getServerSession(req, res, authOptions);
 
         if (!session) {
-            res.status(401).json(null);
+            return res.status(401).json(null);
         }
 
         try {
@@ -49,18 +49,18 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                 }
 
                 if (updateImage) {
-                    res.status(200).json("Image updated successfully.");
+                    return res.status(200).json("Image updated successfully.");
                 } else {
-                    res.status(500).json("Updating image failed.");
+                    return res.status(500).json("Updating image failed.");
                 }
             });
         } catch (e) {
-            res.status(500).json({ error: "Fetching user failed." });
+            return res.status(500).json({ error: "Fetching user failed." });
         } finally {
             await prisma.$disconnect();
         }
 
     } else {
-        res.status(405).end();
+        return res.status(405).end();
     }
 }

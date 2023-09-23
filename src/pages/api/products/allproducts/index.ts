@@ -22,12 +22,12 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                     brand: true,
                 }
             });
-            res.status(200).json(productsFetch);
+            return res.status(200).json(productsFetch);
         } catch (e) {
-            res.status(500).json({ error: 'Unable to fetch products.' });
+            return res.status(500).json({ error: 'Unable to fetch products.' });
         }
 
     } else {
-        res.status(405).end();
+        return res.status(405).end();
     }
 }

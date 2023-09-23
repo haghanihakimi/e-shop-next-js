@@ -13,7 +13,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         const session = await getServerSession(req, res, authOptions);
 
         if (!session) {
-            res.status(401).json(null);
+            return res.status(401).json(null);
         }
 
         try {
@@ -34,21 +34,21 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                                 password: await hashPass(req.body?.user?.newPassword),
                             },
                         });
-                        res.status(200).json("Your password successfully updated.");
+                        return res.status(200).json("Your password successfully updated.");
                     } else {
-                        res.status(401).json("Your current password is incorrect. Please enter your current password before changing it.");
+                        return res.status(401).json("Your current password is incorrect. Please enter your current password before changing it.");
                     }
                 } else {
-                    res.status(404).json("User not found");
+                    return res.status(404).json("User not found");
                 }
             });
         } catch (e) {
-            res.status(500).json({ error: "Fetching user failed." });
+            return res.status(500).json({ error: "Fetching user failed." });
         } finally {
             await prisma.$disconnect();
         }
 
     } else {
-        res.status(405).end();
+        return res.status(405).end();
     }
 }

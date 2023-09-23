@@ -26,18 +26,18 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                     }
                 });
                 if (allBrandProducts && Object.keys(allBrandProducts).length > 0) {
-                    res.status(200).json(allBrandProducts);
+                    return res.status(200).json(allBrandProducts);
                 } else {
-                    res.status(200).json([]);
+                    return res.status(200).json([]);
                 }
             });
         } catch (e) {
-            res.status(500).json({ error: "Unable to fetch brands." });
+            return res.status(500).json({ error: "Unable to fetch brands." });
         } finally {
             await prisma.$disconnect();
         }
 
     } else {
-        res.status(405).end("Internal server error.");
+        return res.status(405).end("Internal server error.");
     }
 }

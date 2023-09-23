@@ -17,7 +17,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         try {
             await applyRateLimit(req, res)
         } catch(e) {
-            res.status(429).json("Oops! Slow down a bit. Too many requests.")
+            return res.status(429).json("Oops! Slow down a bit. Too many requests.")
         }
 
         try {
@@ -61,16 +61,16 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                             }
                         })
                     }
-                    res.status(200).json(favorite);
+                    return res.status(200).json(favorite);
                 });
             }
         } catch (e) {
-            res.status(500).json({ error: "Unable to load favorites list." });
+            return res.status(500).json({ error: "Unable to load favorites list." });
         } finally {
             await prisma.$disconnect();
         }
 
     } else {
-        res.status(405).end("Internal server error.");
+        return res.status(405).end("Internal server error.");
     }
 }

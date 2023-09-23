@@ -30,18 +30,18 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                     }
                 });
                 if (allCategoryProducts && Object.keys(allCategoryProducts).length > 0) {
-                    res.status(200).json(allCategoryProducts);
+                    return res.status(200).json(allCategoryProducts);
                 } else {
-                    res.status(200).json([]);
+                    return res.status(200).json([]);
                 }
             });
         } catch (e) {
-            res.status(500).json({ error: "Unable to fetch category products." });
+            return res.status(500).json({ error: "Unable to fetch category products." });
         } finally {
             await prisma.$disconnect();
         }
 
     } else {
-        res.status(405).end("Internal server error.");
+        return res.status(405).end("Internal server error.");
     }
 }

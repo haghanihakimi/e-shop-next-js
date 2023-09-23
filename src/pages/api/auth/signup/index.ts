@@ -14,12 +14,12 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                     email: 'john@email.com'
                 }
             });
-            res.status(200).json(getUser);
+            return res.status(200).json(getUser);
         } catch (e) {
-            res.status(500).json({ error: 'Unable to fetch countries list.' });
+            return res.status(500).json({ error: 'Unable to fetch countries list.' });
         }
 
     } else {
-        res.status(405).end();
+        return res.status(405).end();
     }
 }

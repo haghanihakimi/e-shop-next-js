@@ -6,16 +6,15 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-    let user:any = {user: null};
-    let email = "";
-
     if (req.method === 'GET') {
         const session = await getServerSession(req, res, authOptions);
 
-        if(session){
-            res.status(401).json(null);
+        if (session) {
+            return res.status(401).json(null);
         }
-        
+
+        let email = "";
+
         if (req.query.user) {
             if (Array.isArray(req.query.user)) {
                 email = req.query.user.join(',');
@@ -23,21 +22,23 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                 email = req.query.user.toString();
             }
         }
+
         try {
-            user = await prisma.user.findUnique({
+            const user = await prisma.user.findUnique({
                 where: {
                     email: email
                 }
             });
-            if(user && Object.keys(user).length > 0) {
-                res.status(200).json(user);
-            }
-            res.status(200).json(null);
-        } catch (e) {
-            res.status(500).json({ error: "Fetching user failed." });
-        }
 
+            if (user && Object.keys(user).length > 0) {
+                return res.status(200).json(user);
+            }
+
+            return res.status(200).json(null);
+        } catch (e) {
+            return res.status(500).json({ error: "Fetching user failed." });
+        }
     } else {
-        res.status(405).end();
+        return res.status(405).end();
     }
 }

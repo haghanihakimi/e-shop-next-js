@@ -13,15 +13,15 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
             const uploadthingURL = process.env.UPLOADTHING_URL;
 
             if (uploadthingSecret && uploadthingId && uploadthingURL) {
-                res.status(200).json(true);
+                return res.status(200).json(true);
             } else {
                 res.status(200).json(false);
             }
         } catch (e) {
-            res.status(500).json({ error: "Checking UploadThing API key failed." });
+            return res.status(500).json({ error: "Checking UploadThing API key failed." });
         }
 
     } else {
-        res.status(405).end();
+        return res.status(405).end();
     }
 }

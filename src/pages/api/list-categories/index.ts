@@ -10,18 +10,18 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
             await prisma.$transaction(async (prisma) => {
                 const allCategories = await prisma.category.findMany();
                 if (allCategories && allCategories.length > 0) {
-                    res.status(200).json(allCategories);
+                    return res.status(200).json(allCategories);
                 } else {
-                    res.status(200).json([]);
+                    return res.status(200).json([]);
                 }
             });
         } catch (e) {
-            res.status(500).json({ error: "Unable to fetch categories." });
+            return res.status(500).json({ error: "Unable to fetch categories." });
         } finally {
             await prisma.$disconnect();
         }
 
     } else {
-        res.status(405).end("Internal server error.");
+        return res.status(405).end("Internal server error.");
     }
 }

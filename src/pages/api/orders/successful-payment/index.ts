@@ -12,7 +12,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         const session = await getServerSession(req, res, authOptions);
 
         if (!session) {
-            res.status(401).json({data: "Unauthorized access!"});
+            return res.status(401).json({data: "Unauthorized access!"});
         }
 
         try {
@@ -27,16 +27,16 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
             });
             if(order) {
                 if(order.userId === session?.user?.id){
-                    res.status(200).json({data: order});
+                    return res.status(200).json({data: order});
                 }
-                res.status(401).json({data: "Unauthorized access!"});
+                return res.status(401).json({data: "Unauthorized access!"});
             }
-            res.status(404).json({data: "Order not found!"});
+            return res.status(404).json({data: "Order not found!"});
         } catch (e) {
-            res.status(500).json({ data: 'Unable to load order.' });
+            return res.status(500).json({ data: 'Unable to load order.' });
         }
 
     } else {
-        res.status(405).end();
+        return res.status(405).end();
     }
 }

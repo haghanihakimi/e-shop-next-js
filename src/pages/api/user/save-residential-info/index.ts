@@ -13,20 +13,20 @@ interface ChangedField {
 }
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-    let saveResidentialInfo: any = null;
-    let originalResidentialInfo: any = null;
-    const changedFields: ChangedField = {
-        street: '',
-        city: '',
-        state: '',
-        postcode: '',
-    };
 
     if (req.method === 'POST') {
+        let saveResidentialInfo: any = null;
+        let originalResidentialInfo: any = null;
+        const changedFields: ChangedField = {
+            street: '',
+            city: '',
+            state: '',
+            postcode: '',
+        };
         const session = await getServerSession(req, res, authOptions);
 
         if (!session) {
-            res.status(401).json(null);
+            return res.status(401).json(null);
         }
 
         try {
@@ -65,16 +65,16 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                 if (saveResidentialInfo.postcode !== originalResidentialInfo.postcode) {
                     changedFields.postcode = saveResidentialInfo.postcode;
                 }
-                res.status(200).json(changedFields);
+                return res.status(200).json(changedFields);
             }
-            res.status(500).json("OOPS! Something went wrong with updating your residential information!");
+            return res.status(500).json("OOPS! Something went wrong with updating your residential information!");
         } catch (e) {
-            res.status(500).json({ error: "Fetching user failed." });
+            return res.status(500).json({ error: "Fetching user failed." });
         } finally {
             await prisma.$disconnect();
         }
 
     } else {
-        res.status(405).end();
+        return res.status(405).end();
     }
 }
