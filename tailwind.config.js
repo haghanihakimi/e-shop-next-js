@@ -23,9 +23,22 @@ module.exports = {
         'sans': ['Helvetica', 'Arial', 'sans-serif'],
       },
       fontSize: {
+        xxs: '0.6rem',
         sm: '0.7rem',
-        base: '0.9rem'
-      }
+        base: '0.9rem',
+        md: '0.96rem'
+      },
+      keyframes: {
+        bounceBubbles: {
+          '0%': { opacity: '0', transform: 'scaleX(0.5)' },
+          '25%': { opacity: '0.25', transform: 'translateY(0)' },
+          '50%': { opacity: '0.5', transform: 'translateY(0)' },
+          '100%': { opacity: '1.0', transform: 'translateY(0)' },
+        },
+      },
+      animation: {
+        'bounceBubbles': 'bounceBubbles 350ms linear 0ms 1 alternate'
+      },
     },
   },
   plugins: [

@@ -1,0 +1,71 @@
+:root {
+    --swiper-navigation-size: 44px;
+    --swiper-theme-color: hsla(360, 100%, 100%, 0.70);
+}
+
+.swiper {
+    width: 100%;
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+}
+
+.swiper-slide img {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.swiper {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.swiper-slide {
+    background-size: cover;
+    background-position: center;
+    margin: 0;
+    padding: 0;
+}
+
+.mySwiper2 {
+    height: auto;
+    width: 100%;
+    margin-left: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.mySwiper {
+    height: fit-content;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 0;
+    margin: 0;
+    padding: 0;
+}
+
+.mySwiper .swiper-slide {
+    width: 100%;
+    height: auto;
+    opacity: 0.55;
+    margin: 0;
+    padding: 0;
+}
+
+.mySwiper .swiper-slide-thumb-active {
+    opacity: 1;
+}
+
+.swiper-slide img {
+    display: block;
+    border-radius: 4px;
+}

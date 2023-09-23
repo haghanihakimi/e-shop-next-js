@@ -8,38 +8,25 @@ import { getTheme } from "@/app/store/reducers/theme";
 import { filterProductsList } from "@/app/store/reducers/products";
 import {
   HiArrowsUpDown as SortIcon,
-  HiStar as StarIcon,
-
 } from "react-icons/hi2";
 import Link from "next/link";
 import { useProducts } from "@/app/store/actions/products";
 import { RootState } from "@/app/store/store";
 import Loading from "@/app/partials/Loading";
+import ProductPrice from "@/app/partials/ProductPrice";
 import Footer from '@/app/partials/Footer';
+import ProductRating from "@/app/partials/ProductRating";
+import ProductImage from "@/app/partials/ProductImage";
+import ProductTitle from "@/app/partials/ProductTitle";
+import { useFavorites } from "@/app/store/actions/favorites";
 
-export default function HomeContainer() {
+const HomeContainer = () => {
   const [sort, setSort] = useState('');
   const [fetchingProducts, setFetchingProducts] = useState(false);
   const products = useSelector((state: RootState) => state.products);
   const dispatch = useDispatch();
   const { getProducts } = useProducts();
-
-  const convertRating = (rating: number) => {
-    return (rating / 5) * 100;
-  }
-
-  const discountCalculator = (price: any, discount: any) => {
-    if (discount && discount > 0) {
-      const discountDecimal = discount / 100;
-
-      const discountAmount = price * discountDecimal;
-
-      const salePrice = price - discountAmount;
-
-      return salePrice;
-    }
-    return 0;
-  }
+  const { getFavorites } = useFavorites();
 
   useEffect(() => {
     dispatch(getTheme());
@@ -177,54 +164,13 @@ export default function HomeContainer() {
                   products.productsList.map((product: any, i: any) => {
                     const price = product.price !== null ? parseFloat(product.price) : parseFloat(JSON.parse(product.attributes).price[0]);
                     return <div key={i} className="object-cover rounded aspect-square shadow-md sm:hover:shadow-lg transition duration-20 scale-1 sm:hover:scale-105 rounded flex flex-col gap-2 p-2 justify-between items-start bg-white border border-slate-300 dark:border-slate-700 dark:bg-slate-800">
-                      <Link href={`/view/product/${(product.categories[0].category.name).toLowerCase()}/${product.id}/${(product.title).replace(/ /g, "-").toLowerCase()}`} target="_self"
-                        className="w-full max-h-[300px] relative aspect-square select-none">
-                        <Image
-                          src={product.thumbnail}
-                          alt="iPhone 6"
-                          width={500}
-                          height={500}
-                          priority={true}
-                          className="w-full max-h-[250px] min-h-[250px] object-cover rounded aspect-square z-0"
-                        />
-                        {
-                          product.discount !== null
-                            ?
-                            <div className="w-fit h-auto absolute top-2 left-1 p-1 rounded bg-baby-blue text-white text-base font-bold tracking-wide">
-                              -{product.discount < 10 ? `0${product.discount}` : product.discount}%
-                            </div>
-                            : ''
-                        }
-                        <div className="w-full h-full absolute top-0 left-0 runded dark:bg-slate-900 dark:bg-opacity-10 z-10">&nbsp;</div>
-                      </Link>
-
+                      <ProductImage category={product.categories[0].category.name} thumbnail={product.thumbnail} productId={product.id} productTitle={product.title} productDiscount={product.discount} />
                       <h2 className="w-full block p-0 m-0 text-left flex flex-col gap-1 pt-2">
-                        <div className='w-[99.2px] relative px-2 m-0 block'>
-                          <div style={{ width: `${convertRating(product.rating).toFixed(6)}%` }} className='p-0 m-0 inline-flex flex-row gap-0 flex-nowrap overflow-hidden'>
-                            <StarIcon className="w-5 h-5 shrink-0 text-amber-400" />
-                            <StarIcon className="w-5 h-5 shrink-0 text-amber-400" />
-                            <StarIcon className="w-5 h-5 shrink-0 text-amber-400" />
-                            <StarIcon className="w-5 h-5 shrink-0 text-amber-400" />
-                            <StarIcon className="w-5 h-5 shrink-0 text-amber-400" />
-                          </div>
-                        </div>
-                        <Link href={`/view/product/${(product.categories[0].category.name).toLowerCase()}/${product.id}/${(product.title).replace(/ /g, "-").toLowerCase()}`} target="_self"
-                          className="w-full relative block px-2 text-base text-slate-900 font-bold tracking-wide dark:text-light-gray">
-                          {product.title}
-                        </Link>
+                        <ProductRating rating={product.rating} />
+                        <ProductTitle category={product.categories[0].category.name} productId={product.id} productTitle={product.title} />
                       </h2>
 
-                      <h4 className="w-full px-2 text-lg font-bold text-slate-800 flex flex-row gap-1 dark:text-light-gray">
-                        <Link href={`/view/product/${(product.categories[0].category.name).toLowerCase()}/${product.id}/${(product.title).replace(/ /g, "-").toLowerCase()}`} target="_self"
-                          className="w-full relative">
-                          <span>
-                            {product.attributes !== null ? 'From ' : ''}${product.discount !== null ? discountCalculator(price, product.discount).toFixed(2) : price.toFixed(2)}
-                          </span> {product.discount !== null ? '-' : ''} {product.discount !== null ? <del className="text-base text-slate-800 dark:text-light-gray font-normal">
-                            ${price.toFixed(2)}
-                          </del>
-                            : ''}
-                        </Link>
-                      </h4>
+                      <ProductPrice category={product.categories[0].category.name} productId={product.id} productTitle={product.title} productDiscount={product.discount} productPrice={price} attributes={product.attributes} />
                     </div>
                   })
                   : ''
@@ -238,3 +184,5 @@ export default function HomeContainer() {
     </main >
   )
 }
+
+export default HomeContainer;

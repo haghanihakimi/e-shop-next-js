@@ -2,8 +2,8 @@
 
 interface LoadingProps {
     color: string;
-    width: number;
-    height: number
+    width: any;
+    height: any
 }
 
 export default function Loading({color, width, height}: LoadingProps) {

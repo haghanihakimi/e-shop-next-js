@@ -10,11 +10,13 @@ interface FilterPayload {
 export interface ProductsState {
     productsList: Array<any>,
     singleProduct: any,
+    outStock: Array<any>,
 }
 
 const initialState: ProductsState = {
     productsList: [],
-    singleProduct: []
+    singleProduct: [],
+    outStock: [],
 }
 
 export const ProductsSlice = createSlice({
@@ -22,10 +24,17 @@ export const ProductsSlice = createSlice({
     initialState,
     reducers: {
         fillProductsList: (state, action: PayloadAction<Array<any>>) => {
-            state.productsList = action.payload
+            if(state.productsList.length <= 0) {
+                state.productsList = action.payload
+            }
         },
         fillSingleProduct: (state, action: PayloadAction<any>) => {
             state.singleProduct = action.payload
+        },
+        fillOutStock: (state, action: PayloadAction<any>) => {
+            if (state.outStock !== null && state.outStock.length <= 0) {
+                state.outStock = action.payload
+            }
         },
         filterProductsList: (state, action: PayloadAction<FilterPayload>) => {
             switch (action.payload.name) {
@@ -74,6 +83,7 @@ export const ProductsSlice = createSlice({
 export const {
     fillProductsList,
     fillSingleProduct,
+    fillOutStock,
     filterProductsList,
 } = ProductsSlice.actions
 

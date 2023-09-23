@@ -1,0 +1,8 @@
+#profile_settings_accordion .MuiBox-root {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+#profile_settings_accordion .MuiPaper-elevation {
+    margin-bottom: 8px;
+    border-radius: 4px;
+}

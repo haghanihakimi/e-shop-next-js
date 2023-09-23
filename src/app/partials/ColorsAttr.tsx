@@ -4,6 +4,9 @@ import Link from "next/link";
 import {
     HiCheck as CheckIcon,
 } from "react-icons/hi2";
+import { fillImages, setColor, setColorName } from "../store/reducers/singlePage";
+import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
 
 
 interface BreadcrumbProps {
@@ -11,6 +14,15 @@ interface BreadcrumbProps {
 }
 
 export default function DropDownAttr({ data }: BreadcrumbProps) {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        return() => {
+            dispatch(fillImages([]));
+            dispatch(setColor(''));
+            dispatch(setColorName(''));
+        }
+    },[]);
 
     return (
         <>
@@ -38,19 +50,26 @@ export default function DropDownAttr({ data }: BreadcrumbProps) {
                                                 <input
                                                     type="radio"
                                                     className="hidden invisible opacity-0 peer"
-                                                    id={`rdColor${i}`}
+                                                    id={`colors-${i}`}
                                                     name="colors"
                                                     value={attr.color[0]}
+                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                        dispatch(fillImages(JSON.parse(data.attributes).colors[i].images.length > 0 ? JSON.parse(data.attributes).colors[i].images : []));
+                                                        dispatch(setColor(attr.color[0]));
+                                                        dispatch(setColorName(attr.color_name));
+                                                    }}
                                                 />
                                                 <label
-                                                    htmlFor={`rdColor${i}`}
-                                                    className={`w-8 h-8 rounded-full flex items-center justify-center shadow-lg ring-4 ring-transparent transition duration-200 peer-checked:ring-2 peer-checked:ring-blue-400 border border-slate-300 dark:border-slate-700`}
+                                                    htmlFor={`colors-${i}`}
+                                                    className={`w-8 h-8 rounded-full flex items-center justify-center cursor-pointer shadow-lg ring-4 ring-transparent transition duration-200 peer-checked:ring-2 peer-checked:ring-blue-600 border border-slate-300 dark:border-slate-700 focus:border-transparent`}
                                                     style={style}
                                                 >
                                                 </label>
-                                                <span className="text-sm text-slate-800 dark:text-light-gray transition duration-200 peer-checked:underline peer-checked:font-medium peer-checked:text-blue-600">
+                                                <label 
+                                                htmlFor={`colors-${i}`}
+                                                className="text-sm text-slate-800 dark:text-light-gray transition duration-200 peer-checked:underline peer-checked:font-medium peer-checked:text-blue-600">
                                                     {attr.color_name}
-                                                </span>
+                                                </label>
                                             </div>
                                         )
                                     })

@@ -14,6 +14,11 @@ module.exports = {
             'www.images.samsung.com',
             'images.samsung.com',
             'resource.logitech.com',
+            'enterprise-api-stage.fastcourier.com.au',
+            'www.enterprise-api-stage.fastcourier.com.au',
+            'https://enterprise-api-stage.fastcourier.com.au',
+            'cdn.shopify.com',
+            'utfs.io',
         ],
     },
 }

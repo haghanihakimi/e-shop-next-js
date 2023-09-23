@@ -20,17 +20,17 @@ export const ThemeSlice = createSlice({
             localStorage.setItem('theme', JSON.stringify(action.payload))
             const storeTheme = localStorage.getItem('theme');
             state.theme = storeTheme ? JSON.parse(storeTheme) : '';
-            if(document.querySelector('html') && document.querySelector('html').className !== null) {
-                document.querySelector('html').className = state.theme
+            if(document.querySelector('html') && document.querySelector('html')!.className !== null) {
+                document.querySelector('html')!.className = state.theme
             }
         },
         getTheme: (state) => {
             if (state.theme.length >= 1) {
                 const storeTheme = localStorage.getItem('theme');
                 state.theme = storeTheme ? JSON.parse(storeTheme) : '';
-                document.querySelector('html').className = state.theme
+                document.querySelector('html')!.className = state.theme
             } else {
-                localStorage.setItem('theme', JSON.stringify('white'))
+                localStorage.setItem('theme', JSON.stringify('light'))
                 const storeTheme = localStorage.getItem('theme');
                 state.theme = storeTheme ? JSON.parse(storeTheme) : '';
                 console.log(state.theme.length);
