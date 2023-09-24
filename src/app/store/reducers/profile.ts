@@ -1,0 +1,59 @@
+import { createSlice } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
+
+interface Payload {
+    firstname: string;
+    lastname: string;
+    email: any;
+    phone: string;
+    image: any;
+    country: string;
+    street: string;
+    city: string;
+    state: string;
+    postcode: string;
+}
+
+export interface ProfileState {
+    firstname: string;
+    lastname: string;
+    email: any;
+    phone: any;
+    image: any;
+    country: string;
+    street: string;
+    city: string;
+    state: string;
+    postcode: string;
+}
+
+const initialState: ProfileState = {
+    firstname: '',
+    lastname: '',
+    email: '',
+    phone: '',
+    image: '',
+    country: '',
+    street: '',
+    city: '',
+    state: '',
+    postcode: '',
+}
+
+export const ProfileSlice = createSlice({
+    name: 'Profile',
+    initialState,
+    reducers: {
+        setProfile: (state, action: PayloadAction<Partial<ProfileState>>) => {
+            // Use Partial<ProfileState> to allow updating only some properties
+            return { ...state, ...action.payload };
+        },
+    },
+})
+
+// Action creators are generated for each case reducer function
+export const {
+    setProfile,
+} = ProfileSlice.actions
+
+export default ProfileSlice.reducer
