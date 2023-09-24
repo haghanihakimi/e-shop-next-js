@@ -1,11 +1,11 @@
 import axios from 'axios'
-
 import { fillProductsList, fillSingleProduct, fillOutStock } from '../reducers/products';
 import { deleteCartItem } from '../reducers/cart';
 import { setRelatedProducts } from '../reducers/relatedProducts';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { RootState } from '../store';
+import { getCookie } from 'cookies-next';
 
 export function useProducts() {
     const dispatch = useDispatch();
@@ -118,7 +118,7 @@ export function useProducts() {
     }
 
     async function getProductStocks(products: Array<any>) {
-        const storedCart = localStorage.getItem('cart');
+        const storedCart = getCookie('cart');
         const cart = storedCart ? JSON.parse(storedCart) : [];
 
         try {

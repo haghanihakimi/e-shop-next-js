@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import { setCookie, getCookie } from 'cookies-next';
 
 export interface ThemeState {
     theme: any,
 }
 
-const storedTheme = localStorage.getItem('theme');
+const storedTheme = getCookie('theme'); //localStorage.getItem('theme');
 const parsedTheme = storedTheme ? JSON.parse(storedTheme) : '';
 
 const initialState: ThemeState = {
@@ -17,8 +18,8 @@ export const ThemeSlice = createSlice({
     initialState,
     reducers: {
         setTheme: (state, action: PayloadAction<string>) => {
-            localStorage.setItem('theme', JSON.stringify(action.payload))
-            const storeTheme = localStorage.getItem('theme');
+            setCookie('theme', JSON.stringify(action.payload));
+            const storeTheme = getCookie('theme');
             state.theme = storeTheme ? JSON.parse(storeTheme) : '';
             if(document.querySelector('html') && document.querySelector('html')!.className !== null) {
                 document.querySelector('html')!.className = state.theme
@@ -26,14 +27,13 @@ export const ThemeSlice = createSlice({
         },
         getTheme: (state) => {
             if (state.theme.length >= 1) {
-                const storeTheme = localStorage.getItem('theme');
+                const storeTheme = getCookie('theme');
                 state.theme = storeTheme ? JSON.parse(storeTheme) : '';
                 document.querySelector('html')!.className = state.theme
             } else {
-                localStorage.setItem('theme', JSON.stringify('light'))
-                const storeTheme = localStorage.getItem('theme');
+                setCookie('theme', JSON.stringify('light'));
+                const storeTheme = getCookie('theme');
                 state.theme = storeTheme ? JSON.parse(storeTheme) : '';
-                console.log(state.theme.length);
             }
         },
     },

@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import { setCookie, getCookie } from 'cookies-next';
 
-const storedCart = localStorage.getItem('cart');
+const storedCart = getCookie('cart');//localStorage.getItem('cart');
 const parsedStoredCart = storedCart ? JSON.parse(storedCart) : [];
 
 
@@ -49,7 +50,7 @@ export const CartSlice = createSlice({
                     alert(`You can have ${action.payload.limit} of this item in your cart.`);
                 }
             }
-            localStorage.setItem('cart', JSON.stringify(state.cart));
+            setCookie('cart', JSON.stringify(state.cart));
         },
         updateCart: (state, action: PayloadAction<{ id: number; color: string; capacity: string; dimensions: string; newQuantity: any }>) => {
             const updatedCart = state.cart.map((cart: any) => {
@@ -62,18 +63,18 @@ export const CartSlice = createSlice({
                 return cart;
             });
             state.cart = updatedCart;
-            localStorage.setItem('cart', JSON.stringify(state.cart));
+            setCookie('cart', JSON.stringify(state.cart));
         },
         deleteCartItem: (state, action: PayloadAction<{ id: number }>) => {
             let i = state.cart.map(cart => cart.id).indexOf(action.payload.id)
             state.cart.splice(i, 1)
 
-            localStorage.setItem('cart', JSON.stringify(state.cart));
+            setCookie('cart', JSON.stringify(state.cart));
         },
         emptyCart: (state, action: PayloadAction) => {
             state.cart = [];
 
-            localStorage.setItem('cart', JSON.stringify(state.cart));
+            setCookie('cart', JSON.stringify(state.cart));
         },
         setShippingCost: (state, action: PayloadAction<any>) => {
             state.shippingCost = action.payload

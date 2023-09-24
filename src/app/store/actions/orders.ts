@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import { getCookie } from 'cookies-next';
 
 export function useOrders() {
     const dispatch = useDispatch();
@@ -22,7 +23,7 @@ export function useOrders() {
     });
 
     async function placeOrder(order: any) {
-        const storedCart = localStorage.getItem('cart');
+        const storedCart = getCookie('cart');
         const cart = storedCart ? JSON.parse(storedCart) : [];
 
         try {
