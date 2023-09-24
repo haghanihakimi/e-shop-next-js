@@ -14,27 +14,29 @@ export function useCheckApis() {
         // withCredentials: true,
     });
 
-    async function checkUploadthingApi() {
-        http.interceptors.response.use(function (response) {
-            dispatch(setUploadthing(response.data));
-            return response.data;
-        }, function (error) {
-            switch (error.response.status) {
-                case 401:
-                    break;
-                case 404:
-                    break;
-                case 405:
-                    break;
-                case 500:
-                    break;
-                default:
-                    break;
-            }
+    async function checkUploadthingApi() {        
+        try {
+            await http.get('/api/check-uploadthing-key')
+            .then(response => {
+                switch (response.status) {
+                    case 200:
+                        dispatch(setUploadthing(response.data));
+                        break;
+                    case 401:
+                        break;
+                    case 404:
+                        break;
+                    case 405:
+                        break;
+                    case 500:
+                        break;
+                    default:
+                        break;
+                }
+            });
+        } catch(error) {
             return Promise.resolve(error);
-        });
-
-        const response = await http.get('/api/check-uploadthing-key');
+        }
     }
 
     return {

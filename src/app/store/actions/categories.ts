@@ -20,11 +20,43 @@ export function useCategories() {
 
     async function getCategories() {
         if (categories.categories && categories.categories.length <= 0) {
-            http.interceptors.response.use(function (response) {
-                dispatch(setCategories(response.data));
-                return response.data;
-            }, function (error) {
-                switch (error.response.status) {
+            try {
+                await http.get('/api/list-categories').then(response => {
+                    switch (response.status) {
+                        case 200:
+                            dispatch(setCategories(response.data));
+                            break;
+                        case 401:
+                            router.push(`/error/401?&code=401`, { scroll: false });
+                            break;
+                        case 405:
+                            router.push(`/error/405?&code=405`, { scroll: false });
+                            break;
+                        case 500:
+                            alert("OOPS! Sorry, something went wrong with fetching list of categories.");
+                            break;
+                        default:
+                            break;
+                    }
+                });
+            } catch (error) {
+                return Promise.resolve(error);
+            }
+        }
+    }
+
+    async function getCategoryProducts(categoryId: any) {
+
+        try {
+            await http.get('/api/category-products', {
+                params: {
+                    categoryId: categoryId,
+                }
+            }).then(response => {
+                switch (response.status) {
+                    case 200:
+                        dispatch(setCategoryProducts(response.data));
+                        break;
                     case 401:
                         router.push(`/error/401?&code=401`, { scroll: false });
                         break;
@@ -32,44 +64,15 @@ export function useCategories() {
                         router.push(`/error/405?&code=405`, { scroll: false });
                         break;
                     case 500:
-                        alert("OOPS! Sorry, something went wrong with fetching list of categories.");
+                        alert("OOPS! Sorry, something went wrong with fetching list of category products.");
                         break;
                     default:
                         break;
                 }
-                return Promise.resolve(error);
             });
-
-            const response = await http.get('/api/list-categories');
-        }
-    }
-
-    async function getCategoryProducts(categoryId: any) {
-        http.interceptors.response.use(function (response) {
-            dispatch(setCategoryProducts(response.data));
-            return response.data;
-        }, function (error) {
-            switch (error.response.status) {
-                case 401:
-                    router.push(`/error/401?&code=401`, { scroll: false });
-                    break;
-                case 405:
-                    router.push(`/error/405?&code=405`, { scroll: false });
-                    break;
-                case 500:
-                    alert("OOPS! Sorry, something went wrong with fetching list of category products.");
-                    break;
-                default:
-                    break;
-            }
+        } catch (error) {
             return Promise.resolve(error);
-        });
-
-        const response = await http.get('/api/category-products', {
-            params: {
-                categoryId: categoryId,
-            }
-        });
+        }
     }
 
     return {

@@ -20,36 +20,43 @@ export function useBrands() {
 
     async function getBrands() {
         if (brands.brands && brands.brands.length <= 0) {
-            http.interceptors.response.use(function (response) {
-                dispatch(setBrands(response.data));
-                return response.data;
-            }, function (error) {
-                switch (error.response.status) {
-                    case 401:
-                        router.push(`/error/401?&code=401`, { scroll: false });
-                        break;
-                    case 405:
-                        router.push(`/error/405?&code=405`, { scroll: false });
-                        break;
-                    case 500:
-                        alert("OOPS! Sorry, something went wrong with fetching list of brands.");
-                        break;
-                    default:
-                        break;
-                }
+            try {
+                await http.get('/api/list-brands')
+                    .then(response => {
+                        switch (response.status) {
+                            case 200:
+                                dispatch(setBrands(response.data));
+                                break;
+                            case 401:
+                                router.push(`/error/401?&code=401`, { scroll: false });
+                                break;
+                            case 405:
+                                router.push(`/error/405?&code=405`, { scroll: false });
+                                break;
+                            case 500:
+                                alert("OOPS! Sorry, something went wrong with fetching list of brands.");
+                                break;
+                            default:
+                                break;
+                        }
+                    })
+            } catch (error) {
                 return Promise.resolve(error);
-            });
-
-            const response = await http.get('/api/list-brands');
+            }
         }
     }
 
     async function getBrandProducts(brandId: any) {
-            http.interceptors.response.use(function (response) {
-                dispatch(setBrandProducts(response.data));
-                return response.data;
-            }, function (error) {
-                switch (error.response.status) {
+        try {
+            await http.get('/api/brand-products', {
+                params: {
+                    brandId: brandId,
+                }
+            }).then(response => {
+                switch (response.status) {
+                    case 200:
+                        dispatch(setBrandProducts(response.data));
+                        break;
                     case 401:
                         router.push(`/error/401?&code=401`, { scroll: false });
                         break;
@@ -62,14 +69,10 @@ export function useBrands() {
                     default:
                         break;
                 }
-                return Promise.resolve(error);
             });
-
-            const response = await http.get('/api/brand-products', {
-                params: {
-                    brandId: brandId,
-                }
-            });
+        } catch (error) {
+            return Promise.resolve(error);
+        }
     }
 
     return {

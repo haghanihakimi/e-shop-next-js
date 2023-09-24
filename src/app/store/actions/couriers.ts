@@ -26,43 +26,56 @@ export function useCouriers() {
     }
 
     async function getCouriers(item: any) {
-        await axios.post(`${base}/api/quotes`,
-            {
-                "pickupSuburb": "CENTRAL QUEENSLAND UNIVERSITY",
-                "pickupState": 'QLD',
-                "pickupPostcode": "4701",
-                "pickupBuildingType": "commercial",
-                "isPickupTailLift": false,
-                "destinationSuburb": item.suburb,
-                "destinationState": item.state,
-                "destinationPostcode": item.postcode,
-                "destinationBuildingType": "residential",
-                "isDropOffTailLift": false,
-                "isDropOffPOBox": false,
-                "items": [
-                    {
-                        "type": "box",
-                        "weight": item.weight,
-                        "length": item.length,
-                        "width": item.width,
-                        "height": item.height,
-                        "quantity": item.quantity
-                    }
-                ]
-            },
-            {
-                headers: {
-                    'Secret-Key': fastCourierKey,
+        try {
+            await axios.post(`${base}/api/quotes`,
+                {
+                    "pickupSuburb": "CENTRAL QUEENSLAND UNIVERSITY",
+                    "pickupState": 'QLD',
+                    "pickupPostcode": "4701",
+                    "pickupBuildingType": "commercial",
+                    "isPickupTailLift": false,
+                    "destinationSuburb": item.suburb,
+                    "destinationState": item.state,
+                    "destinationPostcode": item.postcode,
+                    "destinationBuildingType": "residential",
+                    "isDropOffTailLift": false,
+                    "isDropOffPOBox": false,
+                    "items": [
+                        {
+                            "type": "box",
+                            "weight": item.weight,
+                            "length": item.length,
+                            "width": item.width,
+                            "height": item.height,
+                            "quantity": item.quantity
+                        }
+                    ]
                 },
-            }
-        )
-            .then(response => {
-                if (response.status !== 200) {
-                    alert('Unable to fetch suburbs.');
-                    return;
+                {
+                    headers: {
+                        'Secret-Key': fastCourierKey,
+                    },
                 }
-                dispatch(setCouriers(response.data.data));
-            });
+            )
+                .then(response => {
+                    switch (response.status) {
+                        case 200:
+                            dispatch(setCouriers(response.data.data));
+                            break;
+                        case 500:
+                            alert('Unable to fetch suburbs.');
+                            break;
+                        case 405:
+                            alert('Unable to fetch suburbs.');
+                            break;
+                        default:
+                            alert('Unable to fetch suburbs.');
+                            break;
+                    }
+                });
+        } catch (error) {
+            return Promise.resolve(error);
+        }
     }
 
     return {

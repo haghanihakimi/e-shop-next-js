@@ -11,11 +11,21 @@ export function useCountries() {
         if (countries && countries.countries.length <= 0) {
             await axios.get('/api/countries')
                 .then(response => {
-                    if (response.status !== 200) {
-                        alert("Unable to fetch products.");
-                        return;
+                    switch (response.status) {
+                        case 200:
+                            dispatch(setCountries(response.data));
+                            break;
+                        case 401:
+                            break;
+                        case 405:
+                            alert(response.data);
+                            break;
+                        case 500:
+                            alert(response.data);
+                            break;
+                        default:
+                            break;
                     }
-                    dispatch(setCountries(response.data));
                 });
         }
     }
