@@ -153,9 +153,7 @@ const Navigation = () => {
         window.addEventListener('resize', toggleMediaView, true);
 
         if (status === "authenticated") {
-            getFavorites().then(() => {
-                getCategories();
-            });
+            getFavorites();
             dispatch(setProfile({
                 firstname: session?.user?.firstname,
                 lastname: session?.user?.lastname,
@@ -169,6 +167,7 @@ const Navigation = () => {
                 postcode: session?.user?.postcode,
             }));
         }
+        getCategories();
 
         return () => {
             window.removeEventListener('scroll', disableMenusScroll, true)
