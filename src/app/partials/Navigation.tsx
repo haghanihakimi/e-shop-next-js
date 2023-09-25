@@ -189,7 +189,7 @@ const Navigation = () => {
 
                     {/* menu container */}
                     <div className="w-full flex justify-end items-center gap-2">
-                        <ul className="sm:inline-block hidden">
+                        <ul className="sm:inline-block">
                             <li className="inline-block">
                                 <Link href='/' target="_self"
                                     className="inline-block p-2 text-slate-800 text-base transition duration-200 font-medium tracking-wide dark:text-light-gray hover:text-baby-blue dark:hover:text-baby-blue">

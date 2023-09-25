@@ -119,7 +119,7 @@ export default function DropDownAttr({ theme }: Props) {
         if ((profileData?.firstname.length > 0 && profileData?.firstname !== profile?.firstname) ||
             (profileData?.lastname.length > 0 && profileData?.lastname !== profile?.lastname) ||
             (profileData?.email.length > 0 && profileData?.email !== profile?.email) ||
-            (profileData?.phone.length > 0 && profileData?.phone !== profile?.phone)) {
+            (profileData.phone && profileData?.phone.length > 0 && profileData?.phone !== profile?.phone)) {
             return true;
         } else {
             return false;
@@ -127,10 +127,10 @@ export default function DropDownAttr({ theme }: Props) {
     }
 
     const checkResidentialInfo = () => {
-        if ((profileData?.street.length > 0 && profileData?.street !== profile?.street) ||
-            (profileData?.city.length > 0 && profileData?.city !== profile?.city) ||
-            (profileData?.state.length > 0 && profileData?.state !== profile?.state) ||
-            (profileData?.postcode.length > 0 && profileData?.postcode !== profile?.postcode)) {
+        if ((profileData.street && profileData?.street.length > 0 && profileData?.street !== profile?.street) ||
+            (profileData.city && profileData?.city.length > 0 && profileData?.city !== profile?.city) ||
+            (profileData.state && profileData?.state.length > 0 && profileData?.state !== profile?.state) ||
+            (profileData.postcode && profileData?.postcode.length > 0 && profileData?.postcode !== profile?.postcode)) {
             return true;
         } else {
             return false;

@@ -10,7 +10,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     if (req.method === 'POST') {
         const session = await getSession({req});
         if(session) {
-            res.status(401).json({authenticated: true});
+            return res.status(401).json('Invalid request!');
         }
         try {
             const { email, password } = req.body;
@@ -22,19 +22,16 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
             })
             if (getUser !== null && Object.keys(getUser).length > 0) {
                 if (await isSamePass(password, getUser.password)) {
-                    res.status(200).json(getUser);
-                    return;
+                    return res.status(200).json(getUser);
                 }
-                res.status(500).json({ error: 'Incorrect email or password. Please check given email and password and try again.' });
-                return;
+                return res.status(500).json('Incorrect email or password. Please check given email and password and try again.');
             }
-            res.status(500).json({ error: 'Incorrect email or password. Please check given email and password and try again.' });
-            return
+            return res.status(500).json('Incorrect email or password. Please check given email and password and try again.');
         } catch (e) {
-            res.status(500).json({ error: 'Unable to fetch user.' });
+            return res.status(500).json('Unable to fetch user.');
         }
 
     } else {
-        res.status(405).end();
+        return res.status(405).end('Internal error!');
     }
 }

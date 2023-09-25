@@ -25,6 +25,7 @@ export interface ProfileState {
     city: string;
     state: string;
     postcode: string;
+    errors: Array<any>;
 }
 
 const initialState: ProfileState = {
@@ -38,6 +39,7 @@ const initialState: ProfileState = {
     city: '',
     state: '',
     postcode: '',
+    errors: [],
 }
 
 export const ProfileSlice = createSlice({
@@ -48,12 +50,16 @@ export const ProfileSlice = createSlice({
             // Use Partial<ProfileState> to allow updating only some properties
             return { ...state, ...action.payload };
         },
+        fillErrors: (state, action: PayloadAction<any>) => {
+            state.errors = action.payload
+        },
     },
 })
 
 // Action creators are generated for each case reducer function
 export const {
     setProfile,
+    fillErrors,
 } = ProfileSlice.actions
 
 export default ProfileSlice.reducer

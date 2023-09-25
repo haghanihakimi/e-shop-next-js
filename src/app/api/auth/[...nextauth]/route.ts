@@ -4,6 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { NextAuthOptions } from "next-auth";
 import axios from "axios";
 import { PrismaClient } from '@prisma/client';
+import { toast } from 'react-toastify';
 
 const prisma = new PrismaClient();
 
@@ -19,10 +20,12 @@ export const authOptions: NextAuthOptions = {
             async authorize(credentials) {
                 const response = await axios.post('http://localhost:3000/api/auth/singin', credentials);
 
-                if (response.status === 200 && response.data) {
-                    return response.data
+                switch (response.status) {
+                    case 200:
+                        return response.data;
+                    default:
+                        return null;
                 }
-                return null;
             },
         })
     ],

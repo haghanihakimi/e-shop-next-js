@@ -1,8 +1,8 @@
 'use client';
 import { signIn, useSession } from "next-auth/react";
+import Head from "next/head";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import Head from "next/head";
 import Navigation from "@/app/partials/Navigation";
 import React, { FormEventHandler, useEffect } from "react";
 import { getTheme } from "@/app/store/reducers/theme";
@@ -35,7 +35,7 @@ const Login = () => {
             redirect: false,
         });
 
-        if (res && res.error === "CredentialsSignin") {
+        if (res && res.error) {
             setUserInfo({ ...userInfo, loginErrors: "Incorrect email or password. Please check given email and password and try again." });
             return;
         }
@@ -55,10 +55,6 @@ const Login = () => {
                 status && status === "unauthenticated"
                     ?
                     <main className="w-full relative h-auto pb-12">
-                        <Head>
-                            <title>eShop - Login</title>
-                            <meta property="og:eShop-Login" content="eShop - Login" key="eShop-Login" />
-                        </Head>
                         <Navigation />
 
                         {/* Brands Grids */}
@@ -92,7 +88,7 @@ const Login = () => {
                                     Sign In
                                 </button>
                                 <div className="w-full relative flex flex-row items-center justify-start">
-                                    <Link href="#" className="w-fit block relative text-blue-500 text-base font-medium tracking-wide hover:underline">
+                                    <Link href="/auth/register" className="w-fit block relative text-blue-500 text-base font-medium tracking-wide hover:underline">
                                         Create Account
                                     </Link>
                                     {/* <span className="w-fit block relative text-blue-500 text-base font-medium tracking-wide">

@@ -46,7 +46,7 @@ model User {
   email         String?     @unique
   emailVerified DateTime?
   password      String?
-  photo         String?
+  photo         String?     @default("https://cdn-icons-png.flaticon.com/512/456/456212.png")
   photoKey      String?
   street        String?
   city          String?
