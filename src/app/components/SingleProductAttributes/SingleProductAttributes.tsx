@@ -191,7 +191,6 @@ const SingleProductAttributes: React.FC<Props> = ({ singleProduct, products }) =
                     : ''
             }
 
-
             {
                 products.singleProduct.categories && products.singleProduct.categories.length > 0
                     ?
@@ -209,6 +208,18 @@ const SingleProductAttributes: React.FC<Props> = ({ singleProduct, products }) =
                             }
                         </div>
                     })
+                    : ''
+            }
+
+            {
+                products.singleProduct.sku && products.singleProduct.sku.length > 0
+                    ?
+                    <div className="w-full flex flex-row gap-1 items-center text-base text-slate-700 dark:text-light-gray">
+                        <strong>SKU:</strong>
+                        <span className="text-blue-600 font-semibold dark:text-blue-400">
+                            {products.singleProduct.sku.slice(4, 16).toUpperCase()}
+                        </span>
+                    </div>
                     : ''
             }
         </div>

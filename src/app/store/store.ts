@@ -12,6 +12,7 @@ import OrdersSlice from './reducers/orders'
 import FavoritesSlice from './reducers/favorites'
 import CheckApiSlice from './reducers/checkApi'
 import ProfileSlice from './reducers/profile'
+import SearchSlice from './reducers/search'
 
 export const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ export const store = configureStore({
     favorites: FavoritesSlice,
     checkApi: CheckApiSlice,
     profile: ProfileSlice,
+    search: SearchSlice,
   },
 })
 

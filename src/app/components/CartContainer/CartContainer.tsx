@@ -228,16 +228,16 @@ const CartContainer = () => {
                 return "";
         }
     }
+
+    const debouncedGetSuburbs = debounce((value: any) => {
+        getSuburbs(value).then(() => {
+            setDeliveryInfo((prevInfo) => ({ ...prevInfo, cityList: true }));
+        });
+    }, 2000);
     const searchSuburbs = (value: any) => {
         setDeliveryInfo((prevInfo) => ({ ...prevInfo, city: value }));
         if (value.length > 0) {
-            const debouncedGetSuburbs = debounce(() => {
-                getSuburbs(value).then(() => {
-                    setDeliveryInfo((prevInfo) => ({ ...prevInfo, cityList: true }));
-                });
-            }, 2000);
-
-            debouncedGetSuburbs(); // Call the debounced function
+            debouncedGetSuburbs(value); // Call the debounced function
         }
     };
     const searchPostCodes = (value: any) => {

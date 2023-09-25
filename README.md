@@ -1,7 +1,6 @@
 Remaining problems:
 Login page doesn't throw error message if the entered email or password is incorrect.
 Registration page should be created by now.
-Navigation menu disappears when move to Profile page.
 
 ```bash
 npm run dev

@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useProfile } from "@/app/store/actions/profile";
 import { toast } from "react-toastify";
 import { UploadDropzone } from "@/utils/uploadthing";
-import "@uploadthing/react/styles.css";
+// import "@uploadthing/react/styles.css";
 import { setProfile } from "@/app/store/reducers/profile";
 
 
@@ -329,7 +329,7 @@ export default function DropDownAttr({ theme }: Props) {
                         </div>
                         {
                             checkApi.uploadthing ?
-                                <div className="w-full relative flex flex-col gap-1">
+                                <div id="uploadthing" className="w-full relative flex flex-col gap-1">
                                     <label
                                         className="w-full text-md tracking-wide font-medium text-slate-700 dark:text-gray-300">
                                         Profile Image

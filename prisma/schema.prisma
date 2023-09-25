@@ -89,7 +89,7 @@ model Product {
   categories       ProductCategory[]
   orders           OrderItem[]
   favorites        Favorites[]
-  title            String
+  title            String            @unique
   sku              String            @unique @default(cuid())
   shortDescription String?
   description      String?
