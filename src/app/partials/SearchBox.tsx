@@ -1,5 +1,5 @@
 "use client";
-import React, { FormEventHandler, useEffect } from "react";
+import React, { useEffect } from "react";
 import { debounce } from 'lodash';
 import * as Dialog from '@radix-ui/react-dialog';
 import Image from 'next/image';
@@ -32,7 +32,6 @@ export default function SearchBox() {
 
     useEffect(() => {
         return () => {
-            ;
         }
     }, []);
     return (
@@ -78,7 +77,7 @@ export default function SearchBox() {
                                     <div className='w-full select-none flex relative h-auto max-h-[400px] px-4 flex flex-col gap-1 overflow-auto overflow-x-hidden'>
                                         {
                                             search.results.map((result: any, i: any) => {
-                                                return <div key={i} className='w-full relative p-2 flex flex-row gap-1 items-center justify-between bg-slate-800 rounded transition duration-200 hover:bg-slate-600'>
+                                                return <div key={i} className='w-full relative p-2 flex flex-row gap-1 items-center justify-between bg-gray-200 hover:bg-gray-300 rounded transition duration-200 dark:bg-slate-800 dark:hover:bg-slate-600'>
                                                     {/* result product image */}
                                                     <div className='w-8 h-8 rounded'>
                                                         <Image
