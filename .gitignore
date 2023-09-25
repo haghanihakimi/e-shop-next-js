@@ -3,6 +3,9 @@
 #Prisma dev migrations
 /prisma/migrations
 
+#VS directory
+/.vs
+
 # dependencies
 /node_modules
 /.pnp
@@ -28,7 +31,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-# .env*.local
+.env*.local
 
 # vercel
 .vercel
