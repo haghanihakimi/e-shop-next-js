@@ -14,6 +14,17 @@ Setting up the entire project on your system is straightforward. However, in som
 <li>Run <code>npm install next</code></li>
 <li>Run <code>npm update next</code></li>
 </ol><br/>
+<h2>
+Next-Auth Options:
+</h2>
+<p>
+For login and registrations, I utilized the <code>next-auth</code> package. To use this package without encountering any errors, you must generate a random secret value and place it in your <code>.env.local</code> file just before <code>NEXT_PUBLIC_NEXTAUTH_SECRET</code>.
+
+To quickly generate a random secret key, you can run the following command in your terminal:
+```bash
+openssl rand -base64 32
+```
+</p>
 <h2>Usage:</h2>
 For this project, it's not necessary to have third-party API keys or a specific plan. However, if you want to access the full range of features in this project, you may need the following:
 <p>
