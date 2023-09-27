@@ -28,6 +28,7 @@ import { setCouriers } from "@/app/store/reducers/couriers";
 import { updateCart, deleteCartItem, emptyCart } from "@/app/store/reducers/cart";
 import Link from "next/dist/client/link";
 import CountUp from 'react-countup'
+import { useCheckApis } from "@/app/store/actions/checkApi";
 import { useOrders } from "@/app/store/actions/orders";
 import { useProducts } from "@/app/store/actions/products";
 import { useRouter } from "next/navigation";
@@ -69,6 +70,7 @@ const CartContainer = () => {
     const countries = useSelector((state: RootState) => state.countries);
     const couriers = useSelector((state: RootState) => state.couriers);
     const stock = useSelector((state: RootState) => state.products);
+    const checkApi = useSelector((state: RootState) => state.checkApi);
     const cityWrapper = React.useRef(null)
     const postcodeWrapper = React.useRef(null)
     const [expandedAccPersonal, setExpandedAccPersonal] = React.useState<boolean>(true);
@@ -105,6 +107,7 @@ const CartContainer = () => {
     const { getProductStocks } = useProducts();
     const [loadingCouriers, setLoadingCouriers] = React.useState<boolean>(false);
     const [placingOrder, setPlacingOrder] = React.useState<boolean>(false);
+    const {checkFastCourierApi} = useCheckApis();
 
     const dispatch = useDispatch();
 
@@ -233,23 +236,22 @@ const CartContainer = () => {
         getSuburbs(value).then(() => {
             setDeliveryInfo((prevInfo) => ({ ...prevInfo, cityList: true }));
         });
-    }, 2000);
+    }, 500);
+    const debouncedGetPostCodes = debounce((value: any) => {
+        getSuburbs(value).then(() => {
+            setDeliveryInfo((prevInfo) => ({ ...prevInfo, postcodesList: true }));
+        });
+    }, 500);
     const searchSuburbs = (value: any) => {
         setDeliveryInfo((prevInfo) => ({ ...prevInfo, city: value }));
-        if (value.length > 0) {
-            debouncedGetSuburbs(value); // Call the debounced function
+        if (value.length > 0 && checkApi.courier) {
+            debouncedGetSuburbs(value);
         }
     };
     const searchPostCodes = (value: any) => {
         setDeliveryInfo((prevInfo) => ({ ...prevInfo, postcode: value }));
-        if (value.length > 0) {
-            const debouncedGetSuburbs = debounce(() => {
-                getSuburbs(value).then(() => {
-                    setDeliveryInfo((prevInfo) => ({ ...prevInfo, postcodesList: true }));
-                });
-            }, 2000);
-
-            debouncedGetSuburbs(); // Call the debounced function
+        if (value.length > 0 && checkApi.courier) {
+            debouncedGetPostCodes(value);
         }
     }
     const setSuburbPostcode = (city: any, postcode: any, state: any) => {
@@ -269,7 +271,7 @@ const CartContainer = () => {
     }
     const completeOrder = () => {
         if (recipientInfo.firstname.length > 0 && recipientInfo.surname.length > 0 && recipientInfo.email.length > 0 && recipientInfo.phone.length > 0) {
-            if (deliveryInfo.city.length > 0 && deliveryInfo.postcode.length > 0 && deliveryInfo.street.length > 0 && Object.keys(deliveryInfo.courier).length > 0) {
+            if (deliveryInfo.city.length > 0 && deliveryInfo.postcode.length > 0 && deliveryInfo.street.length > 0) {
                 if ((checkCardType(creditCards.number) === "Master Card" || checkCardType(creditCards.number) === "Visa") &&
                     creditCards.validCCV && creditCards.firstname.length > 0 && creditCards.lastname.length > 0) {
                     setPlacingOrder(true);
@@ -296,11 +298,10 @@ const CartContainer = () => {
     useEffect(() => {
         dispatch(getTheme());
         getCountries().then(async () => {
-            await getProductStocks(cart.cart);
+            await getProductStocks(cart.cart).then(() => {
+                checkFastCourierApi();
+            });
         });
-        if (countries.countries && countries.countries.length > 0) {
-            // setSelectedCountry(countries.countries[0].country);
-        }
         const hideCitiesList = (event: any) => {
             if (cityWrapper.current && !(cityWrapper.current as HTMLElement).contains(event.target)) {
                 setDeliveryInfo((prevInfo) => ({ ...prevInfo, cityList: false }))
@@ -341,49 +342,10 @@ const CartContainer = () => {
                 courier: {}
             }));
         };
-        // const askForNotificationPermission = async () => {
-        //     try {
-        //         const permissionResult = await Notification.requestPermission();
-        //         return permissionResult === "granted";
-        //     } catch (error) {
-        //         console.error("Error requesting notification permission:", error);
-        //         return false;
-        //     }
-        // };
-
-        // const displayNotification = (title: any, options: any, url: any) => {
-        //     if (Notification.permission === "granted") {
-        //         const notification = new Notification(title, options);
-        //         notification.onclick = () => {
-        //             window.open(url, "_blank");
-        //             notification.close();
-        //         };
-        //     }
-        // };
-
-        // const showNotification = async () => {
-        //     const permissionGranted = await askForNotificationPermission();
-        //     if (permissionGranted) {
-        //         displayNotification(
-        //             "New Message",
-        //             {
-        //                 body: "You have received a new message!",
-        //                 icon: "https://next-status === "authenticated".js.org/img/logo/logo-xs.png",
-        //             },
-        //             "http://localhost:3000/cart" 
-        //         );
-        //     }
-        // };
-
-        // showNotification();
     }, [countries.countries, cart.cart, status])
 
     return (
         <main className="w-full relative h-auto pb-12">
-            <Head>
-                <title>eShop - Cart</title>
-                <meta property="og:eShop-Cart" content="eShop - Cart" key="eShop-Cart" />
-            </Head>
             <Navigation />
             {
                 cart.cart
@@ -477,17 +439,6 @@ const CartContainer = () => {
                                                             </AccordionSummary>
                                                             <AccordionDetails>
                                                                 <div className="w-full relative flex flex-col select-none gap-4">
-                                                                    {/* <select onChange={(e: React.ChangeEvent<HTMLSelectElement>) => { setSelectedCountry(e.target.value) }} value={selectedCountry}
-                                                className="w-full text-base cursor-pointer bg-white rounded flex-1 border border-gray-300 text-slate-800 transition duration-150 ring-4 ring-transparent focus:ring-2 focus:ring-blue-600 dark:border-slate-600 dark:text-light-gray dark:bg-slate-700">
-                                                {
-                                                    countries.countries && countries.countries.length > 0
-                                                        ?
-                                                        countries.countries.map((country, i) => {
-                                                            return <option value={country.country} key={i} defaultChecked={countries.countries[0].country}>{country.country}</option>
-                                                        })
-                                                        : ''
-                                                }
-                                            </select> */}
                                                                     <input type="text" placeholder="Street Address"
                                                                         defaultValue={deliveryInfo.street}
                                                                         onInput={(e: React.ChangeEvent<HTMLInputElement>) => { setDeliveryInfo((prevInfo) => ({ ...prevInfo, street: e.target.value })) }}
@@ -555,9 +506,13 @@ const CartContainer = () => {
                                                                                 : ''
                                                                         }
                                                                     </select>
-                                                                    <span className="p-2 text-base font-semibold text-slate-700 dark:text-light-gray">
-                                                                        Available Couriers:
-                                                                    </span>
+                                                                    {
+                                                                        checkApi.courier ?
+                                                                            <span className="p-2 text-base font-semibold text-slate-700 dark:text-light-gray">
+                                                                                Available Couriers:
+                                                                            </span>
+                                                                            : ''
+                                                                    }
                                                                     {
                                                                         loadingCouriers
                                                                             ? <div className='w-full p-0 m-0 flex flex-row gap-2 justify-start items-center'>

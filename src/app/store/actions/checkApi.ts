@@ -14,32 +14,54 @@ export function useCheckApis() {
         // withCredentials: true,
     });
 
-    async function checkUploadthingApi() {        
+    async function checkUploadthingApi() {
         try {
             await http.get('/api/check-uploadthing-key')
-            .then(response => {
-                switch (response.status) {
-                    case 200:
-                        dispatch(setUploadthing(response.data));
-                        break;
-                    case 401:
-                        break;
-                    case 404:
-                        break;
-                    case 405:
-                        break;
-                    case 500:
-                        break;
-                    default:
-                        break;
-                }
-            });
-        } catch(error) {
+                .then(response => {
+                    dispatch(setUploadthing(response.data));
+                });
+        } catch (error: any) {
+            switch (error.response.status) {
+                case 401:
+                    break;
+                case 404:
+                    break;
+                case 405:
+                    break;
+                case 500:
+                    break;
+                default:
+                    break;
+            }
+            return Promise.resolve(error);
+        }
+    }
+
+    async function checkFastCourierApi() {
+        try {
+            await http.get('/api/check-fast-courier-key')
+                .then(response => {
+                    dispatch(setCourier(response.data));
+                });
+        } catch (error: any) {
+            switch (error.response.status) {
+                case 401:
+                    break;
+                case 404:
+                    break;
+                case 405:
+                    break;
+                case 500:
+                    break;
+                default:
+                    break;
+            }
             return Promise.resolve(error);
         }
     }
 
     return {
         checkUploadthingApi,
+        checkFastCourierApi
     }
 }

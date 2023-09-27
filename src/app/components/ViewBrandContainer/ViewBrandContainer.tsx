@@ -37,10 +37,6 @@ const ViewBrandContainer = () => {
 
     return (
         <main className="w-full relative h-auto pb-12">
-            <Head>
-                <title>eShop - {brand.brandProducts.title}</title>
-                <meta property="og:eShop-Cart" content="eShop - Cart" key="eShop-Cart" />
-            </Head>
             <Navigation />
 
             {/* Brands Grids */}
