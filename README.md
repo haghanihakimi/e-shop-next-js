@@ -10,7 +10,7 @@ eShop is a project created entirely with Next.js. For the first time, I've used 
 Setting up the entire project on your system is straightforward. However, in some cases, you may encounter the following error: <code>"Error: Cannot find module 'next/dist/compiled/next-server/app-page.runtime.dev.js'."</code> If this occurs, you can try the following steps to resolve the problem:
 </p>
 <ol>
-<li><code>Remove the <code>.next</code> directory from the root.</code></li>
+<li>Remove the <code>.next</code> directory from the root.</li>
 <li>Run <code>npm install next</code></li>
 <li>Run <code>npm update next</code></li>
 </ol><br/>
