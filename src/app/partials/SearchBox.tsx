@@ -12,6 +12,7 @@ import Loading from "@/app/partials/Loading";
 import { useSearch } from '../store/actions/search';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
+import { fillSearchResults } from "../store/reducers/search";
 
 
 export default function SearchBox() {
@@ -26,6 +27,7 @@ export default function SearchBox() {
     }, 500);
 
     const submitSearchProducts = (item: string) => {
+        fillSearchResults([]);
         setSearching(true);
         debouncedGetSuburbs(item); // Call the debounced function
     }

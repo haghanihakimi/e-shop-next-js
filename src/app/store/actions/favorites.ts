@@ -24,24 +24,22 @@ export function useFavorites() {
             try {
                 await http.get('/api/favorites/fetch/favorites')
                     .then(response => {
-                        switch (response.status) {
-                            case 200:
-                                dispatch(fillFavorites(response.data));
-                                break;
-                            case 401:
-                                router.push(`/error/401?&code=401`, { scroll: false });
-                                break;
-                            case 405:
-                                router.push(`/error/405?&code=405`, { scroll: false });
-                                break;
-                            case 500:
-                                alert("OOPS! Sorry, something went wrong with fetching favorite items.");
-                                break;
-                            default:
-                                break;
-                        }
+                        dispatch(fillFavorites(response.data));
                     });
-            } catch (error) {
+            } catch (error: any) {
+                switch (error.response.status) {
+                    case 401:
+                        router.push(`/error/401?&code=401`, { scroll: false });
+                        break;
+                    case 405:
+                        router.push(`/error/405?&code=405`, { scroll: false });
+                        break;
+                    case 500:
+                        alert("OOPS! Sorry, something went wrong with fetching favorite items.");
+                        break;
+                    default:
+                        break;
+                }
                 return Promise.resolve(error);
             }
         }
@@ -51,27 +49,25 @@ export function useFavorites() {
         try {
             await http.post('/api/favorites/update/favorites', Ids)
                 .then(response => {
-                    switch (response.status) {
-                        case 200:
-                            dispatch(updateFavoritesList({ product: response.data, productId: Ids.productId }));
-                            break;
-                        case 401:
-                            router.push(`/error/401?&code=401`, { scroll: false });
-                            break;
-                        case 405:
-                            router.push(`/error/405?&code=405`, { scroll: false });
-                            break;
-                        case 429:
-                            toast.error("Oops! Slow down a bit. You've sent too many requests! Please wait a minute and try again.");
-                            break;
-                        case 500:
-                            toast.error("OOPS! Sorry, something went wrong with fetching favorite items.");
-                            break;
-                        default:
-                            break;
-                    }
+                    dispatch(updateFavoritesList({ product: response.data, productId: Ids.productId }));
                 });
-        } catch (error) {
+        } catch (error: any) {
+            switch (error.response.status) {
+                case 401:
+                    router.push(`/error/401?&code=401`, { scroll: false });
+                    break;
+                case 405:
+                    router.push(`/error/405?&code=405`, { scroll: false });
+                    break;
+                case 429:
+                    toast.error("Oops! Slow down a bit. You've sent too many requests! Please wait a minute and try again.");
+                    break;
+                case 500:
+                    toast.error("OOPS! Sorry, something went wrong with fetching favorite items.");
+                    break;
+                default:
+                    break;
+            }
             return Promise.resolve(error);
         }
     }

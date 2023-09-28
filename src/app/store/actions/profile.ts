@@ -20,34 +20,32 @@ export function useProfile() {
         try {
             await http.post('/api/user/save-personal-info', data)
                 .then(response => {
-                    switch (response.status) {
-                        case 200:
-                            Object.entries(response.data).forEach(([fieldName, fieldValue]) => {
-                                if (fieldValue !== '') {
-                                    changedFieldNames.push(fieldName);
-                                }
-                            });
-                            if (changedFieldNames.length > 0) {
-                                toast.success(`The following item(s) have been changed successfully: ${changedFieldNames.join(', ')}`)
-                            }
-                            break;
-                        case 401:
-                            toast.error("Unauthorized Access!");
-                            break;
-                        case 404:
-                            toast.error("URL not found!");
-                            break;
-                        case 405:
-                            toast.error("Internal server error!");
-                            break;
-                        case 500:
-                            toast.error("OOPS! Something went wrong with updating your personal information!");
-                            break;
-                        default:
-                            break;
+                    Object.entries(response.data).forEach(([fieldName, fieldValue]) => {
+                        if (fieldValue !== '') {
+                            changedFieldNames.push(fieldName);
+                        }
+                    });
+                    if (changedFieldNames.length > 0) {
+                        toast.success(`The following item(s) have been changed successfully: ${changedFieldNames.join(', ')}`)
                     }
                 });
-        } catch (error) {
+        } catch (error: any) {
+            switch (error.response.status) {
+                case 401:
+                    toast.error("Unauthorized Access!");
+                    break;
+                case 404:
+                    toast.error("URL not found!");
+                    break;
+                case 405:
+                    toast.error("Internal server error!");
+                    break;
+                case 500:
+                    toast.error("OOPS! Something went wrong with updating your personal information!");
+                    break;
+                default:
+                    break;
+            }
             return Promise.resolve(error);
         }
 
@@ -60,34 +58,32 @@ export function useProfile() {
         try {
             await http.post('/api/user/save-residential-info', data)
                 .then(response => {
-                    switch (response.status) {
-                        case 200:
-                            Object.entries(response.data).forEach(([fieldName, fieldValue]) => {
-                                if (fieldValue !== '') {
-                                    changedFieldNames.push(fieldName);
-                                }
-                            });
-                            if (changedFieldNames.length > 0) {
-                                toast.success(`The following item(s) have been changed successfully: ${changedFieldNames.join(', ')}`)
-                            }
-                            break;
-                        case 401:
-                            toast.error("Unauthorized Access!");
-                            break;
-                        case 404:
-                            toast.error("URL not found!");
-                            break;
-                        case 405:
-                            toast.error("Internal server error!");
-                            break;
-                        case 500:
-                            toast.error("OOPS! Something went wrong with updating your residential information!");
-                            break;
-                        default:
-                            break;
+                    Object.entries(response.data).forEach(([fieldName, fieldValue]) => {
+                        if (fieldValue !== '') {
+                            changedFieldNames.push(fieldName);
+                        }
+                    });
+                    if (changedFieldNames.length > 0) {
+                        toast.success(`The following item(s) have been changed successfully: ${changedFieldNames.join(', ')}`)
                     }
                 });
-        } catch (error) {
+        } catch (error: any) {
+            switch (error.response.status) {
+                case 401:
+                    toast.error("Unauthorized Access!");
+                    break;
+                case 404:
+                    toast.error("URL not found!");
+                    break;
+                case 405:
+                    toast.error("Internal server error!");
+                    break;
+                case 500:
+                    toast.error("OOPS! Something went wrong with updating your residential information!");
+                    break;
+                default:
+                    break;
+            }
             return Promise.resolve(error);
         }
 
@@ -98,27 +94,25 @@ export function useProfile() {
         try {
             await http.post('/api/user/change-password', data)
                 .then(response => {
-                    switch (response.status) {
-                        case 200:
-                            toast.success(response.data);
-                            break;
-                        case 401:
-                            toast.error(response.data);
-                            break;
-                        case 404:
-                            toast.error(response.data);
-                            break;
-                        case 405:
-                            toast.error("Internal server error!");
-                            break;
-                        case 500:
-                            toast.error("OOPS! Something went wrong with updating your password!");
-                            break;
-                        default:
-                            break;
-                    }
+                    toast.success(response.data);
                 });
-        } catch (error) {
+        } catch (error: any) {
+            switch (error.response.status) {
+                case 401:
+                    toast.error(error.response.data);
+                    break;
+                case 404:
+                    toast.error(error.response.data);
+                    break;
+                case 405:
+                    toast.error("Internal server error!");
+                    break;
+                case 500:
+                    toast.error("OOPS! Something went wrong with updating your password!");
+                    break;
+                default:
+                    break;
+            }
             return Promise.resolve(error);
         }
 
@@ -129,27 +123,25 @@ export function useProfile() {
         try {
             await http.post('/api/user/update-profile-image', data)
                 .then(response => {
-                    switch (response.status) {
-                        case 200:
-                            toast.success(response.data);
-                            break;
-                        case 401:
-                            toast.error(response.data);
-                            break;
-                        case 404:
-                            toast.error(response.data);
-                            break;
-                        case 405:
-                            toast.error("Internal server error!");
-                            break;
-                        case 500:
-                            toast.error("OOPS! Something went wrong with updating your password!");
-                            break;
-                        default:
-                            break;
-                    }
+                    toast.success(response.data);
                 });
-        } catch (error) {
+        } catch (error: any) {
+            switch (error.response.status) {
+                case 401:
+                    toast.error(error.response.data);
+                    break;
+                case 404:
+                    toast.error(error.response.data);
+                    break;
+                case 405:
+                    toast.error("Internal server error!");
+                    break;
+                case 500:
+                    toast.error("OOPS! Something went wrong with updating your password!");
+                    break;
+                default:
+                    break;
+            }
             return Promise.resolve(error);
         }
 
@@ -158,13 +150,12 @@ export function useProfile() {
     async function createAccount(data: any) {
         try {
             const response = await http.post('/api/auth/signup', data);
-            if(response.data) {
+            if (response.data) {
                 return response.data
             }
             return null;
 
         } catch (error: any) {
-            console.log(error.response);
             switch (error.response.status) {
                 case 401:
                     toast.error(error.response.data);

@@ -2,9 +2,9 @@ import axios from 'axios'
 import { fillProductsList, fillSingleProduct, fillOutStock } from '../reducers/products';
 import { deleteCartItem } from '../reducers/cart';
 import { setRelatedProducts } from '../reducers/relatedProducts';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
-import { RootState } from '../store';
+import { toast } from 'react-toastify';
 import { getCookie } from 'cookies-next';
 
 export function useProducts() {
@@ -27,27 +27,25 @@ export function useProducts() {
                     page: page || 50,
                 }
             }).then(response => {
-                switch (response.status) {
-                    case 200:
-                        dispatch(fillProductsList(response.data));
-                        break;
-                    case 401:
-                        router.push(`/error/401?message=${response.data}&code=401`, { scroll: false });
-                        break;
-                    case 404:
-                        router.push(`/error/404?message=${response.data}&code=404`, { scroll: false });
-                        break;
-                    case 405:
-                        router.push(`/error/405?message=${response.data}&code=405`, { scroll: false });
-                        break;
-                    case 500:
-                        alert("OOPS! Sorry, something went wrong with loading this product.");
-                        break;
-                    default:
-                        break;
-                }
+                dispatch(fillProductsList(response.data));
             });
-        } catch (error) {
+        } catch (error: any) {
+            switch (error.response.status) {
+                case 401:
+                    router.push(`/error/401?message=${error.response.data}&code=401`, { scroll: false });
+                    break;
+                case 404:
+                    router.push(`/error/404?message=${error.response.data}&code=404`, { scroll: false });
+                    break;
+                case 405:
+                    router.push(`/error/405?message=${error.response.data}&code=405`, { scroll: false });
+                    break;
+                case 500:
+                    toast.error("OOPS! Sorry, something went wrong with loading products.");
+                    break;
+                default:
+                    break;
+            }
             return Promise.resolve(error);
         }
     }
@@ -60,27 +58,25 @@ export function useProducts() {
                 }
             })
                 .then(response => {
-                    switch (response.status) {
-                        case 200:
-                            dispatch(fillSingleProduct(response.data));
-                            break;
-                        case 401:
-                            router.push(`/error/401?message=${response.data}&code=401`, { scroll: false });
-                            break;
-                        case 404:
-                            router.push(`/error/404?message=${response.data}&code=404`, { scroll: false });
-                            break;
-                        case 405:
-                            router.push(`/error/405?message=${response.data}&code=405`, { scroll: false });
-                            break;
-                        case 500:
-                            alert("OOPS! Sorry, something went wrong with loading this product.");
-                            break;
-                        default:
-                            break;
-                    }
+                    dispatch(fillSingleProduct(response.data));
                 });
-        } catch (error) {
+        } catch (error: any) {
+            switch (error.response.status) {
+                case 401:
+                    router.push(`/error/401?message=${error.response.data}&code=401`, { scroll: false });
+                    break;
+                case 404:
+                    router.push(`/error/404?message=${error.response.data}&code=404`, { scroll: false });
+                    break;
+                case 405:
+                    router.push(`/error/405?message=${error.response.data}&code=405`, { scroll: false });
+                    break;
+                case 500:
+                    alert("OOPS! Sorry, something went wrong with loading this product.");
+                    break;
+                default:
+                    break;
+            }
             return Promise.resolve(error);
         }
     }
@@ -92,27 +88,25 @@ export function useProducts() {
                     categories: JSON.stringify(categories),
                 },
             }).then(response => {
-                switch (response.status) {
-                    case 200:
-                        dispatch(setRelatedProducts(response.data));
-                        break;
-                    case 401:
-                        router.push(`/error/401?message=${response.data}&code=401`, { scroll: false });
-                        break;
-                    case 404:
-                        router.push(`/error/404?message=${response.data}&code=404`, { scroll: false });
-                        break;
-                    case 405:
-                        router.push(`/error/405?message=${response.data}&code=405`, { scroll: false });
-                        break;
-                    case 500:
-                        alert("OOPS! Sorry, something went wrong with loading this product.");
-                        break;
-                    default:
-                        break;
-                }
+                dispatch(setRelatedProducts(response.data));
             });
-        } catch (error) {
+        } catch (error: any) {
+            switch (error.response.status) {
+                case 401:
+                    router.push(`/error/401?message=${error.response.data}&code=401`, { scroll: false });
+                    break;
+                case 404:
+                    router.push(`/error/404?message=${error.response.data}&code=404`, { scroll: false });
+                    break;
+                case 405:
+                    router.push(`/error/405?message=${error.response.data}&code=405`, { scroll: false });
+                    break;
+                case 500:
+                    toast.error("OOPS! Sorry, something went wrong with loading related product.");
+                    break;
+                default:
+                    break;
+            }
             return Promise.resolve(error);
         }
     }
@@ -127,36 +121,34 @@ export function useProducts() {
                     products: JSON.stringify(products),
                 },
             }).then(response => {
-                switch (response.status) {
-                    case 200:
-                        dispatch(fillOutStock(response.data));
-                        if (response.data !== null || response.data.length > 0) {
-                            cart.forEach((item: any) => {
-                                response.data.forEach((responseItem: any) => {
-                                    if (item.id === responseItem.id) {
-                                        dispatch(deleteCartItem(responseItem.id));
-                                    }
-                                });
-                            });
-                        }
-                        break;
-                    case 401:
-                        router.push(`/error/401?message=${response.data}&code=401`, { scroll: false });
-                        break;
-                    case 404:
-                        router.push(`/error/404?message=${response.data}&code=404`, { scroll: false });
-                        break;
-                    case 405:
-                        router.push(`/error/405?message=${response.data}&code=405`, { scroll: false });
-                        break;
-                    case 500:
-                        alert("OOPS! Sorry, something went wrong with loading this product.");
-                        break;
-                    default:
-                        break;
+                dispatch(fillOutStock(response.data));
+                if (response.data !== null || response.data.length > 0) {
+                    cart.forEach((item: any) => {
+                        response.data.forEach((responseItem: any) => {
+                            if (item.id === responseItem.id) {
+                                dispatch(deleteCartItem(responseItem.id));
+                            }
+                        });
+                    });
                 }
             });
-        } catch (error) {
+        } catch (error: any) {
+            switch (error.response.status) {
+                case 401:
+                    router.push(`/error/401?message=${error.response.data}&code=401`, { scroll: false });
+                    break;
+                case 404:
+                    router.push(`/error/404?message=${error.response.data}&code=404`, { scroll: false });
+                    break;
+                case 405:
+                    router.push(`/error/405?message=${error.response.data}&code=405`, { scroll: false });
+                    break;
+                case 500:
+                    toast.error("OOPS! Sorry, something went wrong with checking products in stock.");
+                    break;
+                default:
+                    break;
+            }
             return Promise.resolve(error);
         }
     }

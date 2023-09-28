@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { setSuburbs, setCouriers } from '../reducers/couriers';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 export function useCouriers() {
     const dispatch = useDispatch();
@@ -8,21 +9,32 @@ export function useCouriers() {
     const base = 'https://enterprise-api-stage.fastcourier.com.au'
 
     async function getSuburbs(suburb: any) {
-        await axios.get(`${base}/api/suburbs`, {
-            headers: {
-                'Secret-Key': fastCourierKey,
-            },
-            params: {
-                search: suburb,
-            }
-        })
-            .then(response => {
-                if (response.status !== 200) {
-                    alert('Unable to fetch suburbs.');
-                    return;
+        try {
+            await axios.get(`${base}/api/suburbs`, {
+                headers: {
+                    'Secret-Key': fastCourierKey,
+                },
+                params: {
+                    search: suburb,
                 }
-                dispatch(setSuburbs(response.data.data));
-            });
+            })
+                .then(response => {
+                    dispatch(setSuburbs(response.data.data));
+                });
+        } catch (error: any) {
+            switch (error.response.status) {
+                case 500:
+                    toast.error('Unable to fetch suburbs.');
+                    break;
+                case 405:
+                    toast.error('Unable to fetch suburbs.');
+                    break;
+                default:
+                    toast.error('Unable to fetch suburbs.');
+                    break;
+            }
+            return Promise.resolve(error);
+        }
     }
 
     async function getCouriers(item: any) {
@@ -55,25 +67,22 @@ export function useCouriers() {
                     headers: {
                         'Secret-Key': fastCourierKey,
                     },
-                }
-            )
+                })
                 .then(response => {
-                    switch (response.status) {
-                        case 200:
-                            dispatch(setCouriers(response.data.data));
-                            break;
-                        case 500:
-                            alert('Unable to fetch suburbs.');
-                            break;
-                        case 405:
-                            alert('Unable to fetch suburbs.');
-                            break;
-                        default:
-                            alert('Unable to fetch suburbs.');
-                            break;
-                    }
+                    dispatch(setCouriers(response.data.data));
                 });
-        } catch (error) {
+        } catch (error: any) {
+            switch (error.response.status) {
+                case 500:
+                    toast.error('Unable to fetch couriers.');
+                    break;
+                case 405:
+                    toast.error('Unable to fetch couriers.');
+                    break;
+                default:
+                    toast.error('Unable to fetch couriers.');
+                    break;
+            }
             return Promise.resolve(error);
         }
     }
