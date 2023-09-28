@@ -1,4 +1,4 @@
-<h1>eShop - Next JS</h1>
+<h1>eShop - Next JS using Prisma</h1>
 <p style="font-size: 16px;">
 eShop is a project created entirely with Next.js. For the first time, I've used <code>Prisma</code> as the database.
 </p>
