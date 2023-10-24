@@ -1,12 +1,7 @@
-import NextAuth from "next-auth/next";
-import { signIn } from "next-auth/react";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { NextAuthOptions } from "next-auth";
 import axios from "axios";
-import { PrismaClient } from '@prisma/client';
-import { toast } from 'react-toastify';
-
-const prisma = new PrismaClient();
 
 export const authOptions: NextAuthOptions = {
     secret: process.env.NEXT_PUBLIC_NEXTAUTH_SECRET,
@@ -29,34 +24,34 @@ export const authOptions: NextAuthOptions = {
             },
         })
     ],
-    callbacks: {
-        async session({ session, token, user }) {
-            const response = await axios.get('http://localhost:3000/api/user/profile', {
-                params: {
-                    user: token.email
-                }
-            });
+    // callbacks: {
+    //     async session({ session, token }) {
+    //         const response = await axios.get('http://localhost:3000/api/user/profile', {
+    //             params: {
+    //                 user: token.email,
+    //             },
+    //         });
 
-            if (response.status === 200 && response.data) {
-                session.user.id = response.data.id;
-                session.user.firstname = response.data.firstname;
-                session.user.lastname = response.data.surname;
-                session.user.phone = response.data.phone;
-                session.user.image = response.data.photo;
-                session.user.street = response.data.street;
-                session.user.city = response.data.city;
-                session.user.state = response.data.state;
-                session.user.postcode = response.data.postcode;
-                session.user.country = response.data.country;
-                session.user.token = token;
-            }
+    //         if (response.status === 200 && response.data) {
+    //             session.user.id = response.data.id;
+    //             session.user.firstname = response.data.firstname;
+    //             session.user.lastname = response.data.surname;
+    //             session.user.phone = response.data.phone;
+    //             session.user.image = response.data.photo;
+    //             session.user.street = response.data.street;
+    //             session.user.city = response.data.city;
+    //             session.user.state = response.data.state;
+    //             session.user.postcode = response.data.postcode;
+    //             session.user.country = response.data.country;
+    //             session.user.token = token;
+    //         }
 
-            return session
-        },
-    },
+    //         return session;
+    //     },
+    // },
     pages: {
         signIn: '/auth/signin',
-        signOut: '/auth/singin'
+        // signOut: '/auth/singin'
     }
 };
 
