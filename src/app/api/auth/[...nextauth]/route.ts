@@ -1,4 +1,5 @@
 import NextAuth from "next-auth";
+import { NextApiRequest, NextApiResponse } from 'next';
 import CredentialsProvider from "next-auth/providers/credentials";
 import { NextAuthOptions } from "next-auth";
 import axios from "axios";
@@ -55,6 +56,5 @@ export const authOptions: NextAuthOptions = {
     }
 };
 
-const handler = NextAuth(authOptions);
-
-export { handler as GET, handler as POST };
+export default (req: NextApiRequest, res: NextApiResponse) =>
+    NextAuth(req, res, authOptions);
