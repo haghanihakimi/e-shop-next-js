@@ -10,7 +10,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import { debounce } from 'lodash';
-import { HiChevronDown as DropdownIcon, HiCheckCircle as CheckMarkIcon } from "react-icons/hi2";
+import { HiChevronDown as DropdownIcon, HiCheckCircle as CheckMarkIcon, HiHeart as HeartIcon } from "react-icons/hi2";
 import { MdDeleteForever as DeleteIcon } from "react-icons/md";
 import { getTheme } from "@/app/store/reducers/theme";
 import { useCountries } from "@/app/store/actions/countries";

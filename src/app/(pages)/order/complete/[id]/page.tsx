@@ -46,7 +46,7 @@ export default function OrderContainer() {
         } else {
             router.push("/auth/login");
         }
-    }, [params?.id, dispatch, status])
+    }, [params?.id, dispatch, status, router, successfulPayment])
 
     return (
         <main className="w-full relative h-auto pb-12">

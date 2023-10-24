@@ -85,7 +85,7 @@ export default function Profile() {
         return () => {
             window.removeEventListener('resize', getScreenSize, true);
         }
-    }, [screenSize, status])
+    }, [screenSize, status, checkUploadthingApi, dispatch, router])
 
     return (
         <main className="w-full relative h-auto pb-12">
