@@ -38,7 +38,7 @@ import { setUpdatingFavs } from "../store/reducers/favorites";
 import { useFavorites } from "../store/actions/favorites";
 import { useCategories } from "../store/actions/categories";
 import Loading from "./Loading";
-import { setProfile } from "../store/reducers/profile";
+import { useProfile } from "../store/actions/profile";
 
 const Accordion = styled((props: AccordionProps) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -91,6 +91,7 @@ const Navigation = () => {
     const opennedCategoriesList = Boolean(categoriesList);
     const { updateFavorites, getFavorites } = useFavorites();
     const { getCategories } = useCategories();
+    const { getUser } = useProfile();
 
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -142,10 +143,10 @@ const Navigation = () => {
             setAnchorEl(null);
         }
         const toggleMediaView = () => {
-            if(window.innerWidth < 640) {
+            if (window.innerWidth < 640) {
                 setCategoriesList(null);
             }
-            if(window.innerWidth >= 640) {
+            if (window.innerWidth >= 640) {
                 setMediaMenu(false);
             }
         }
@@ -154,18 +155,7 @@ const Navigation = () => {
 
         if (status === "authenticated") {
             getFavorites();
-            dispatch(setProfile({
-                firstname: session?.user?.firstname,
-                lastname: session?.user?.lastname,
-                email: session?.user?.email,
-                phone: session?.user?.phone,
-                image: session?.user?.image,
-                country: session?.user?.country,
-                street: session?.user?.street,
-                city: session?.user?.city,
-                state: session?.user?.state,
-                postcode: session?.user?.postcode,
-            }));
+            getUser(session?.user?.email);
         }
         getCategories();
 
@@ -533,7 +523,7 @@ const Navigation = () => {
                                             </Link>
                                             {
                                                 true ?
-                                                    <Accordion expanded={categoriesAccordion === 'panel2'} onChange={mediaCategoriesAcc('panel2')}
+                                                    <Accordion expanded={categoriesAccordion === 'panel2'} onChange={() => {mediaCategoriesAcc('panel2')}}
                                                         sx={{
                                                             "&.MuiPaper-elevation": { backgroundColor: theme.theme === "light" ? '#f9fafb' : '#1e293b', border: 'none', paddingLeft: '8px', paddingRight: '8px' },
                                                             "&.MuiButtonBase-root": { padding: 0 }

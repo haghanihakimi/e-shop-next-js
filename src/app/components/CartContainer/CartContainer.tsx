@@ -2,7 +2,6 @@
 import { useSession } from "next-auth/react";
 import { useDispatch, useSelector } from "react-redux";
 import Image from 'next/image';
-import Head from "next/head";
 import Navigation from "@/app/partials/Navigation";
 import React, { useEffect } from "react";
 import Accordion from '@mui/material/Accordion';
@@ -32,6 +31,7 @@ import { useCheckApis } from "@/app/store/actions/checkApi";
 import { useOrders } from "@/app/store/actions/orders";
 import { useProducts } from "@/app/store/actions/products";
 import { useRouter } from "next/navigation";
+import { useProfile } from "@/app/store/actions/profile";
 import FavoriteButton from "@/app/partials/FavoriteButton";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -71,6 +71,7 @@ const CartContainer = () => {
     const couriers = useSelector((state: RootState) => state.couriers);
     const stock = useSelector((state: RootState) => state.products);
     const checkApi = useSelector((state: RootState) => state.checkApi);
+    const profile = useSelector((state: RootState) => state.profile);
     const cityWrapper = React.useRef(null)
     const postcodeWrapper = React.useRef(null)
     const [expandedAccPersonal, setExpandedAccPersonal] = React.useState<boolean>(true);
@@ -107,7 +108,8 @@ const CartContainer = () => {
     const { getProductStocks } = useProducts();
     const [loadingCouriers, setLoadingCouriers] = React.useState<boolean>(false);
     const [placingOrder, setPlacingOrder] = React.useState<boolean>(false);
-    const {checkFastCourierApi} = useCheckApis();
+    const { checkFastCourierApi } = useCheckApis();
+    const { getUser } = useProfile();
 
     const dispatch = useDispatch();
 
@@ -312,23 +314,25 @@ const CartContainer = () => {
         }
 
         if (status === "authenticated") {
-            setRecipientInfo((prev: any) => ({
-                ...prev,
-                firstname: session.user?.firstname,
-                surname: session.user?.lastname,
-                email: session.user?.email,
-                phone: session.user?.phone,
-            }))
+            getUser(session?.user?.email).finally(() => {
+                setRecipientInfo((prev: any) => ({
+                    ...prev,
+                    firstname: profile.firstname,
+                    surname: profile.lastname,
+                    email: profile.email,
+                    phone: profile.phone,
+                }))
 
-            setDeliveryInfo((prev: any) => ({
-                ...prev,
-                street: session.user?.street,
-                city: session.user?.city,
-                postcode: session.user?.postcode,
-                courier: {},
-            }))
+                setDeliveryInfo((prev: any) => ({
+                    ...prev,
+                    street: profile.street,
+                    city: profile.city,
+                    postcode: profile.postcode,
+                    courier: {},
+                }))
 
-            setStates(session.user?.state)
+                setStates(profile.state)
+            });
         }
 
         document.addEventListener('click', hideCitiesList, true);
@@ -499,7 +503,7 @@ const CartContainer = () => {
                                                                                 countries.countries.map((country, i) => {
                                                                                     if (country.country === 'Australia') {
                                                                                         return JSON.parse(country.states).map((state: any, j: any) => {
-                                                                                            return <option value={state} key={j} defaultValue={state === session.user?.state ? session.user?.state : country.states[0]}>{state}</option>
+                                                                                            return <option value={state} key={j} defaultValue={state === profile.state ? profile.state : country.states[0]}>{state}</option>
                                                                                         })
                                                                                     }
                                                                                 })

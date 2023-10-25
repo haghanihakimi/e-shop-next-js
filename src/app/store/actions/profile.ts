@@ -35,8 +35,7 @@ export function useProfile() {
                         city: response.data.city,
                         state: response.data.state,
                         postcode: response.data.postcode,
-                      }));
-                    console.log(response.data);
+                    }));
                 });
         } catch (error: any) {
             switch (error.response.status) {
