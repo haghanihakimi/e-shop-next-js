@@ -44,10 +44,9 @@ export default function OrderContainer() {
 
             {/* Order date & code */}
             <div className='w-full relative'>
-              {/* moment(orders.createdAt).format("DD/MM/YYYY") */}
               <h2 className='text-2xl font-bold py-2 text-slate-700 dark:text-gray-300'>
                 Order <span className='uppercase'>es-{orders.orders.id}</span>
-                <span className='text-base font-bold block'>Ordered at {moment(orders.createdAt).format("DD/MM/YYYY")}</span>
+                <span className='text-base font-bold block'>Ordered at {moment(orders.orders.createdAt).format("DD/MM/YYYY")}</span>
               </h2>
             </div>
 
