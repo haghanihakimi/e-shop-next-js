@@ -1,9 +1,9 @@
-import NextAuth from "next-auth";
+import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { NextAuthOptions } from "next-auth";
 import axios from "axios";
 
-const authOptions: NextAuthOptions = {
+const authOptions: AuthOptions = {
     secret: process.env.NEXT_PUBLIC_NEXTAUTH_SECRET,
     providers: [
         CredentialsProvider({
