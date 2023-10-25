@@ -337,7 +337,7 @@ export default function DropDownAttr({ theme }: Props) {
                                     <UploadDropzone
                                         className="border-dashed border-gray-300 dark:border-slate-700"
                                         endpoint="imageUploader"
-                                        onClientUploadComplete={(res) => {
+                                        onClientUploadComplete={(res: any) => {
                                             uploadImage(res[0].url, res[0].key);
                                         }}
                                         onUploadError={(error: Error) => {
@@ -434,7 +434,7 @@ export default function DropDownAttr({ theme }: Props) {
                                             countries.countries.map((country, i) => {
                                                 if (country.country === 'Australia') {
                                                     return JSON.parse(country.states).map((state: any, j: any) => {
-                                                        return <option value={state} key={j} defaultValue={state === session?.user?.state ? session?.user?.state : country.states[0]}>{state}</option>
+                                                        return <option value={state} key={j} defaultValue={state === profile.state ? profile.state : country.states[0]}>{state}</option>
                                                     })
                                                 }
                                             })
