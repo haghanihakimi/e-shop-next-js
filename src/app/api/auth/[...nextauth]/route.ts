@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { NextAuthOptions } from "next-auth";
 import axios from "axios";
 
-const authOptions: AuthOptions = {
+export const authOptions: AuthOptions = {
     secret: process.env.NEXT_PUBLIC_NEXTAUTH_SECRET,
     providers: [
         CredentialsProvider({
@@ -57,5 +57,5 @@ const authOptions: AuthOptions = {
 
 const handler = NextAuth(authOptions);
 
-export { handler as GET, handler as POST, authOptions };
+export { handler as GET, handler as POST };
 // export { handler as GET, handler as POST };
