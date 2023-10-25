@@ -15,8 +15,7 @@ import SingleProductAttributes from "@/app/components/SingleProductAttributes/Si
 import SingleProductTabs from '@/app/components/SingleProductTabs/SingleProductTabs';
 import RelatedProducts from '@/app/components/RelatedProducts/RelatedProducts';
 import { useFavorites } from '@/app/store/actions/favorites';
-import { setProfile } from "@/app/store/reducers/profile";
-
+import { useProfile } from "@/app/store/actions/profile";
 
 export default function SingleProduct() {
   const products = useSelector((state: RootState) => state.products);
@@ -27,6 +26,7 @@ export default function SingleProduct() {
   const { getSingleProduct } = useProducts();
   const { data: session, status } = useSession();
   const { getFavorites } = useFavorites();
+  const { getUser } = useProfile();
 
   useEffect(() => {
     dispatch(getTheme());
@@ -41,18 +41,7 @@ export default function SingleProduct() {
 
     if (status === "authenticated") {
       getFavorites();
-      dispatch(setProfile({
-        firstname: session?.user?.firstname,
-        lastname: session?.user?.lastname,
-        email: session?.user?.email,
-        phone: session?.user?.phone,
-        image: session?.user?.image,
-        country: session?.user?.country,
-        street: session?.user?.street,
-        city: session?.user?.city,
-        state: session?.user?.state,
-        postcode: session?.user?.postcode,
-      }));
+      getUser(session?.user?.email);
     }
 
 

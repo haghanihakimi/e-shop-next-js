@@ -47,7 +47,6 @@ export const ProfileSlice = createSlice({
     initialState,
     reducers: {
         setProfile: (state, action: PayloadAction<Partial<ProfileState>>) => {
-            // Use Partial<ProfileState> to allow updating only some properties
             return { ...state, ...action.payload };
         },
         fillErrors: (state, action: PayloadAction<any>) => {
