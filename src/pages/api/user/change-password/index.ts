@@ -20,7 +20,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
             await prisma.$transaction(async (prisma) => {
                 const originalUser = await prisma.user.findUnique({
                     where: {
-                        id: session?.user?.id,
+                        email: session?.user?.email || '',
                     },
                 });
 
@@ -28,7 +28,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                     if ((await isSamePass(req.body?.user?.currentPassword, originalUser?.password))) {
                         const updatePassword = await prisma.user.update({
                             where: {
-                                id: session?.user?.id,
+                                id: originalUser?.id,
                             },
                             data: {
                                 password: await hashPass(req.body?.user?.newPassword),

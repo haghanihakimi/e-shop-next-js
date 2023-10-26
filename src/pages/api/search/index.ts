@@ -7,17 +7,20 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     if (req.method === 'GET') {
         try {
             if (req.query.search && req.query.search.length > 0) {
+                const searchQuery = Array.isArray(req.query.search)
+                    ? req.query.search.join(' ')
+                    : req.query.search;
                 const search = await prisma.product.findMany({
                     where: {
                         OR: [
                             {
                                 title: {
-                                    contains: req.query.search
+                                    contains: searchQuery
                                 }
                             },
                             {
                                 sku: {
-                                    contains: req.query.search
+                                    contains: searchQuery
                                 }
                             }
                         ],

@@ -21,14 +21,14 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                 // await utapi.deleteFiles("2e0fdb64-9957-4262-8e45-f372ba903ac8_image.jpg");
                 const currentImage = await prisma.user.findUnique({
                     where: {
-                        id: session?.user?.id,
+                        email: session?.user?.email || '',
                     }
                 });
                 if (currentImage && currentImage?.photoKey !== null) {
                     await utapi.deleteFiles(currentImage.photoKey).then(async () => {
                         updateImage = await prisma.user.update({
                             where: {
-                                id: session?.user?.id
+                                email: session?.user?.email || ''
                             },
                             data: {
                                 photo: req.body?.user?.photo,
@@ -39,7 +39,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                 } else {
                     updateImage = await prisma.user.update({
                         where: {
-                            id: session?.user?.id
+                            email: session?.user?.email || ''
                         },
                         data: {
                             photo: req.body?.user?.photo,

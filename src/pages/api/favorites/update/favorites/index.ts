@@ -23,10 +23,15 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         try {
             if (session && productId && productId > 0 && brandId && brandId > 0) {
                 await prisma.$transaction(async (prisma) => {
+                    const user = await prisma.user.findUnique({
+                        where: {
+                            email: session?.user?.email || '',
+                        }
+                    });
                     favorite = await prisma.favorites.findUnique({
                         where: {
                             userId_productId: {
-                                userId: session?.user?.id,
+                                userId: user?.id || 0,
                                 productId: productId,
                             }
                         },
@@ -35,7 +40,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                         favorite = await prisma.favorites.delete({
                             where: {
                                 userId_productId: {
-                                    userId: session?.user?.id,
+                                    userId: user?.id || 0,
                                     productId: productId,
                                 }
                             },
@@ -43,7 +48,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                     } else {
                         favorite = await prisma.favorites.create({
                             data: {
-                                userId: session?.user?.id,
+                                userId: user?.id || 0,
                                 productId: productId,
                                 brandId: brandId,
                             },

@@ -31,6 +31,11 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         }
         try {
             const itemIds = req.body.cart.map((item: any) => item.id);
+            const user = await prisma.user.findUnique({
+                where: {
+                    email: session?.user?.email || ''
+                }
+            });
 
             const lowStockItems = await prisma.product.findMany({
                 where: {
@@ -48,7 +53,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
             }
             const placeOrder = await prisma.order.create({
                 data: {
-                    userId: session?.user?.id,
+                    userId: user?.id || 0,
                     paymentType: req.body?.cardType,
                     lastDigits: maskCreditCard(req.body?.cardNumber),
                     status: "processing"

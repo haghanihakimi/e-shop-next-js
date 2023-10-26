@@ -12,9 +12,14 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         if (session) {
             try {
                 await prisma.$transaction(async (prisma) => {
+                    const user = await prisma.user.findUnique({
+                        where: {
+                            email: session?.user?.email || '',
+                        }
+                    });
                     const favorites = await prisma.favorites.findMany({
                         where: {
-                            userId: session?.user?.id,
+                            userId: user?.id || 0,
                         },
                         include: {
                             products: {

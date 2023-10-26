@@ -15,6 +15,11 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         }
 
         try {
+            const user = await prisma.user.findUnique({
+                where: {
+                    email: session?.user?.email || '',
+                }
+            });
             const order = await prisma.order.findUnique({
                 where: {
                     id: orderId,
@@ -25,7 +30,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
                 }
             });
             if(order) {
-                if(order.userId === session?.user?.id){
+                if(order.userId === user?.id){
                     return res.status(200).json({data: order});
                 }
                 return res.status(401).json({data: "Unauthorized access!"});

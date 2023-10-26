@@ -14,9 +14,14 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         }
 
         try {
+            const user = await prisma.user.findUnique({
+                where: {
+                    email: session?.user?.email || '',
+                }
+            });
             const allOrders = await prisma.order.findMany({
                 where: {
-                    userId: session?.user?.id,
+                    userId: user?.id || 0,
                 },
                 include: {
                     items: true,

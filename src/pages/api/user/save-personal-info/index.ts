@@ -33,12 +33,12 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
             await prisma.$transaction(async (prisma) => {
                 originalPersonalInfo = await prisma.user.findUnique({
                     where: {
-                        id: session?.user?.id
+                        email: session?.user?.email || ''
                     }
                 })
                 savePersonalInfo = await prisma.user.update({
                     where: {
-                        id: session?.user?.id
+                        email: session?.user?.email || ''
                     },
                     data: {
                         firstname: req.body?.user?.firstname,
