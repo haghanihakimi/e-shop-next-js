@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/utils/authOptions';
 import { PrismaClient } from '@prisma/client';
 import isSamePass from '@/app/context/SamePass';
 import hashPass from '@/app/context/HashPass';
