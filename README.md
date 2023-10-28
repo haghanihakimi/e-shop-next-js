@@ -1,4 +1,5 @@
 <h1>eShop - Next JS using Prisma</h1>
+<h3><a href="https://live-e-shop-next-js.vercel.app/" target="_blank">Live Demo</a></h3>
 <p style="font-size: 16px;">
 eShop is a project created entirely with Next.js. For the first time, I've used <code>Prisma</code> as the database.
 </p>
